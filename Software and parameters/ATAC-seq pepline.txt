@@ -1,0 +1,34 @@
+###Decompression
+fastq-dump --split-3 SRR7839290.sra
+
+###deadapter-trim_galore
+#Paired-End
+trim_galore -q 20 --phred33 --stringency 3 --length 20 -e 0.1 --paired fq1 fq2 --gzip
+#Single-read
+trim_galore -o output/folder input/fastq/file.fq.gz
+
+###Quality control
+fastqc -o fastqc fastq_1.fastq
+fastqc -o fastqc fastq_2.fastq
+
+###comparison
+#Paired-End
+bowtie2 -x /linuxdata1/download/hg19/Sequence/Bowtie2Index/genome -X 2000 -1 fastq_1.fastq -2 fastq_2.fastq -S input.sam
+#Single-read
+bowtie2 -x /linuxdata1/download/hg19/Sequence/Bowtie2Index/genome -X 2000 -r file.fastq -S input.sam
+
+###remove chrM-samtools
+grep -v 'chrM' input.sam >input_chrM.sam
+samtools view -bS input_chrM.sam -o input_chrM.sort.bam
+samtools sort input_chrM.sort.bam input_chrM.sort
+samtools index input_chrM.sort.bam
+
+###picard.jar-Delete PCR redundancy
+java -d64 -jar picard.jar MarkDuplicates \INPUT=input_chrM.sort.bam \OUTPUT=file_dechrM_picard.sort.bam \METRICS_FILE= H3K27Ac.markDup.metric REMOVE_DUPLICATES=true ASSUME_SORTED=true CREATE_INDEX=true
+
+###macs2
+双末端macs2 callpeak -t file_dechrM_picard.sort.bam -f BAMPE -g hs --keep-dup all --name name_BAMPE --bdg --broad --SPMR --nomodel --extsize 200 -q 0.01
+单末端macs2 callpeak -t file_dechrM_picard.sort.bam -f BAM -g hs --keep-dup all --name name_BAM --bdg --broad --SPMR --nomodel --shift -100 --extsize 200 -q 0.01
+
+###Draw
+picard CollectInsertSizeMetrics I=input.bam O=insert_size_metrics.txt H=insert_size_histogram.pdf M=0.5

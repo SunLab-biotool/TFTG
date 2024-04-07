@@ -1,0 +1,18 @@
+liftOver
+
+RNAseq流程-晨姐（包括计算差异基因limma）
+SE流程-勇哥
+ATAC流程-王凡
+
+BETA
+ROSE geneMapper.py
+
+
+BEDTools
+
+FIMO
+
+ChIPseeker
+
+分析代码
+       hypergeometric test.

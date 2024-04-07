@@ -1,0 +1,50 @@
+#################################Human Paired-End####################################
+fasterq-dump --split-3  "$case_name"
+fasterq-dump --split-3  "$control_name"
+
+#################################bowtie2################################
+bowtie2 -p 12 -x /linuxdata1/wyz/hg38_genome/bowtie2index -1 "$case_name"_1.fastq -2 "$case_name"_2.fastq|/usr/local/bin/samtools sort -O bam -o "$case_name"_case.sort.bam
+/usr/local/bin/samtools index "$case_name"_case.sort.bam "$case_name"_case.sort.bam.bai
+bowtie2 -p 12 -x /linuxdata1/wyz/hg38_genome/bowtie2index -1 "$control_name"_1.fastq -2 "$control_name"_2.fastq|/usr/local/bin/samtools sort -O bam -o "$control_name"_input.sort.bam
+/usr/local/bin/samtools index "$control_name"_input.sort.bam "$control_name"_input.sort.bam.bai
+
+#################################macs2################################
+macs2 callpeak -t "$case_name"_case.sort.bam -c "$control_name"_input.sort.bam -f BAMPE -B -g hs -n "$control_name"_"$case_name" -q 0.01
+
+#################################ROSE################################
+awk '{print $1,$2,$3,$4,$5}' "$control_name"_"$case_name"_peaks.narrowPeak > "$control_name"_"$case_name"_peaks.narrowPeak.bed
+sed -i 's/ /\t/g' "$control_name"_"$case_name"_peaks.narrowPeak.bed
+awk 'BEGIN{OFS=" "}{$5= "@"}{$6= $4}{$7 = "."}{$8 = "@"}{$9 = "@"}{print $1,$4,$5,$2,$3,$8,$7,$9,$6}' "$control_name"_"$case_name"_peaks.narrowPeak.bed > "$control_name"_"$case_name"_macs_peaks.gff
+sed -i 's/@//g' "$control_name"_"$case_name"_macs_peaks.gff
+sed -i 's/ /\t/g' "$control_name"_"$case_name"_macs_peaks.gff
+cp -Rf /linuxdata2/wyz/software/rose/* .
+python ROSE_main.py -g HG38 -i "$control_name"_"$case_name"_macs_peaks.gff -c "$control_name"_input.sort.bam -r "$case_name"_case.sort.bam  -o "$control_name"_"$case_name" -s 12500 -t 2000
+python ROSE_geneMapper.py -g HG38 -i "$control_name"_"$case_name"/"$control_name"_"$case_name"_macs_peaks_SuperEnhancers.table.txt 
+
+
+
+
+#################################Human Single-read####################################
+fasterq-dump --split-3  "$case_name"
+fasterq-dump --split-3  "$control_name"
+
+#################################bowtie2################################
+bowtie2 -p 12 -x /linuxdata1/wyz/hg38_genome/bowtie2index -U "$case_name".fastq|/usr/local/bin/samtools sort -O bam -o "$case_name"_case.sort.bam
+/usr/local/bin/samtools index "$case_name"_case.sort.bam "$case_name"_case.sort.bam.bai
+bowtie2 -p 12 -x /linuxdata1/wyz/hg38_genome/bowtie2index -U "$control_name"_1.fastq|/usr/local/bin/samtools sort -O bam -o "$control_name"_input.sort.bam
+/usr/local/bin/samtools index "$control_name"_input.sort.bam "$control_name"_input.sort.bam.bai
+
+#################################macs2################################
+macs2 callpeak -t "$case_name"_case.sort.bam -c "$control_name"_input.sort.bam -f BAM -B -g hs -n "$control_name"_"$case_name" -q 0.01
+
+#################################ROSE################################
+awk '{print $1,$2,$3,$4,$5}' "$control_name"_"$case_name"_peaks.narrowPeak > "$control_name"_"$case_name"_peaks.narrowPeak.bed
+sed -i 's/ /\t/g' "$control_name"_"$case_name"_peaks.narrowPeak.bed
+awk 'BEGIN{OFS=" "}{$5= "@"}{$6= $4}{$7 = "."}{$8 = "@"}{$9 = "@"}{print $1,$4,$5,$2,$3,$8,$7,$9,$6}' "$control_name"_"$case_name"_peaks.narrowPeak.bed > "$control_name"_"$case_name"_macs_peaks.gff
+sed -i 's/@//g' "$control_name"_"$case_name"_macs_peaks.gff
+sed -i 's/ /\t/g' "$control_name"_"$case_name"_macs_peaks.gff
+cp -Rf /linuxdata2/wyz/software/rose/* .
+python ROSE_main.py -g HG38 -i "$control_name"_"$case_name"_macs_peaks.gff -c "$control_name"_input.sort.bam -r "$case_name"_case.sort.bam  -o "$control_name"_"$case_name" -s 12500 -t 2000
+python ROSE_geneMapper.py -g HG38 -i "$control_name"_"$case_name"/"$control_name"_"$case_name"_macs_peaks_SuperEnhancers.table.txt
+
+

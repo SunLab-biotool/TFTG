@@ -1,0 +1,61 @@
+rm(list=ls())
+library(ChIPseeker)
+library(clusterProfiler)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(GenomicFeatures)
+library(org.Hs.eg.db)
+
+spompe <- makeTxDbFromGFF('H:\\daqing_windows\\I\\chipseeker2\\gencode.v31.annotation.gff3')
+setwd("H:\\daqing_windows\\D\\315\\data\\TF_chipseq\\Cistrome\\data\\")
+txdb <- spompe
+file_list=dir() 
+file_length=length(file_list)
+
+
+for (i in 1:file_length)
+{
+  setwd("H:\\daqing_windows\\D\\315\\data\\TF_chipseq\\Cistrome\\data\\")
+  file_name=file_list[i]
+  print (file_name)
+  peak<- readPeakFile(file_name)
+  folder_name<-strsplit(file_name,split = "\\.")[[1]][1]
+  
+  promoter <- getPromoters(TxDb=txdb, upstream=3000, downstream=3000)
+  tagMatrix <- getTagMatrix(peak, windows=promoter)
+  
+  peakAnno <- annotatePeak(peak, tssRegion=c(-3000, 3000),TxDb=txdb, annoDb="org.Hs.eg.db")
+  peakannoStat<-peakAnno@annoStat
+  
+  if(is.null(tagMatrix)==FALSE)
+  {
+    next
+  }else if(nrow(tagMatrix)>0)
+  {
+    setwd("H:\\daqing_windows\\I\\chipseeker2\\RESULT\\cistrome\\")
+    
+    pdf(paste0(folder_name,"_tagHeatmap.pdf"))
+    tagHeatmap(tagMatrix, xlim=c(-3000, 3000), color="red")
+    dev.off()
+    
+    pdf(paste0(folder_name,"_upsetplot.pdf"))
+    upsetplot(peakAnno)
+    dev.off()
+    
+    
+    pdf(paste0(folder_name,"_upsetplot.pdf"))
+    upsetplot=upsetplot(peakAnno)
+    print(upsetplot)
+    dev.off()
+    
+    write.table(peakAnno,file=paste0(folder_name,"_anno.txt"),row.names=F,sep="\t")
+    write.table(peakannoStat,file=paste0(folder_name,"_annoset.txt"),row.names=F,sep="\t")
+    
+  }else
+  {
+    next
+  }
+  
+  
+  print(i)
+}
+

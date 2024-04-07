@@ -1,0 +1,5 @@
+#run
+python ROSE_geneMapper.py -g HG38 -i $output_dir/$input_name
+
+#-g: Specifies the genome of your data
+#-i: Specifies the name of TF binding data

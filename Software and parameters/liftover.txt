@@ -1,0 +1,7 @@
+#run
+liftOver input.bed hg19ToHg38.over.chain output.bed unmapped.txt
+
+#input.bed: The hg19 region bed file to convert
+#hg19ToHg38.over.chain: Conversion coordinate file from UCSC database
+#output.bed: The hg38 region bed file successfully converted from hg19 region bed file
+#unmapped.txt: The hg19 region bed file unsuccessfully converted to hg38 region

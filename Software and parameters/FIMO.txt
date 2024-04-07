@@ -1,0 +1,13 @@
+#run
+bedtools getfasta -fi hg38.fa -bed input.bed -fo input_name.fa
+#-fi: Specifies the genome of your data
+#-bed: your input bed file
+#-fo: The output fasta file
+
+fimo --thresh 1e-9 pwm.txt input_name.fa > input_name_fimo.txt
+
+#--thresh: P_value thresh
+#pwm.txt: Your PWM matrix
+#input_name.fa: Input fasta file
+#input_name_fimo.txt: Output fimo result file
+

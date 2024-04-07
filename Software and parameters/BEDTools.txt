@@ -1,0 +1,6 @@
+#run
+bedtools intersect -a TF_chipseq.bed -b Gene_promoter.bed -wo > TF_gene.bed
+
+#-a: Your input transcription factor chipseq bed file
+#-b: Your input Gene promoter bed file
+#-wo: Count overlapping bases

@@ -1,0 +1,7 @@
+#run
+BETA minus -p $input_dir/$file_name -g hg38 -n "$file_name" -o $output_dir
+
+#-p: Specifies the name of TF binding data
+#-g: Specifies the genome of your data
+#-n: This argument is used to name the result file
+#-o: The directory to store all the output files
