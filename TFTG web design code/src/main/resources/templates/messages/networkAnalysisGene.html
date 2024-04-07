@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-multiselect.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+    <style type="text/css">
+        td {
+            text-align: center;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        .panel-heading {
+            height: 50px;
+            background-color: #317190 !important;
+        }
+
+        h4 {
+            font-size: 30px !important;
+            font-weight: bold !important;
+            color: #fff !important;
+            margin: 0px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="inc/nav :: nav"></div>
+
+<div class="container-fulid" style="margin-top: 10px;">
+    <!-- 面包屑导航 -->
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4><span class="glyphicon glyphicon-th-list" style="color: #ffffff;"></span>
+                    Gene upstream regulatory analysis</h4></div>
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        <!--						<form role="form" action="runNetworkAnalysis">-->
+                        <form method="post" role="form" class="form-horizontal" id="app" action="networkResultGene"
+                              enctype="multipart/form-data">
+                            <div class="row ">
+                                <div class="col-md-12">
+                                    <label>Genes</label><br>
+                                    <div class="row">
+                                        <label for="optionOne" style="display: block;"><input checked="checked" type="radio" class="cb-radio" id="optionOne" value="textarea" name="option"/>
+                                            Paste your data:</label>
+                                        <textarea class="form-control" style="height: 150px;" name="genes" id="genes"></textarea>
+                                        <br>
+                                        <label for="optionTwo" style="display:inline;"><input type="radio" class="cb-radio" id="optionTwo" value="file" name="option"/>
+                                            Upload a file: <input id="file" type="file" name="file" style="display:inherit;"/></label>
+                                        <button type="example" class="btn btn-info btn-sm">
+                                            <span><b><a style="color: #fff;" href="file/analysis2.txt" download="genes-example">Example of Upload File</a></b></span>
+                                        </button>
+
+                                    </div>
+                                    <div class="row">
+                                        <label class="radio-inline" style="font-weight: 600">
+                                            <input type="radio" name="optionsRadiosinline" id="specificity" value="specificity" checked> specificity
+                                        </label>
+                                        <label class="radio-inline" style="font-weight: 600">
+                                            <input type="radio" name="optionsRadiosinline" id="nospecificity" value="nospecificity"> non-specificity
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 15px;">
+                                    <button type="button" class="btn btn-default" id="example" onclick="examplegene()">
+                                        <span style="color: #000;"><b>Example</b></span>
+                                    </button>
+                                    <button type="submit" class="btn btn-default">
+                                        <span style="color: #000;"><b>Analyse</b></span>
+                                    </button>
+                                    <button type="reset" class="btn btn-default">
+                                        <span style="color: #000;"><b>Reset</b></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <br>
+                        <h2 style="color: red">Function introduction</h2>
+                        <p>Users can submit a gene list to extract a TF-mediated <span style="color: red">Cell specific</span> and <span style="color: red">Cell nonspecific</span> transcriptional regulatory network.</p>
+                        <p>This network consists of the submitted genes and their <span style="color: red">one-step neighbor TFs</span>.
+                            TFTG provide multiple topological features for the network, including <span style="color: red">degree</span>, <span style="color: red">betweenness</span> and
+                            <span style="color: red">closeness</span>.
+                        </p>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div style="text-align: center"><img src="img/analysis3.png" style="width: 70%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+
+</body>
+<script type="text/javascript">
+    $('.carousel').carousel({
+        interval: 2000
+    })
+
+    function examplegene() {
+        $("#genes").val("POU5F1\r\n" + "XKR5\r\n" + "CDK3\r\n" + "EVPL\r\n" + "MYZAP");
+    }
+
+    $(document).ready(function () {
+        var radios = $(".cb-radio");
+        $("#filestyle").click(function () {
+            radios.eq(1).prop("checked", true);
+            radios.eq(0).prop("checked", false);
+        });
+        $("#example").click(function () {
+            radios.eq(1).prop("checked", false);
+            radios.eq(0).prop("checked", true);
+        });
+        $("#file").click(function () {
+            radios.eq(1).prop("checked", true);
+            radios.eq(0).prop("checked", false);
+        });
+        $("#inlineCheckbox2").click(function () {
+            if ($('input:checkbox[name="fimo"]:checked').val()) {
+                $("fieldset").removeAttr("disabled");
+                $("#noneselect").remove();
+            } else {
+                $("fieldset").attr("disabled", "disabled");
+                $("#pvalueselect").append('<option id="noneselect" selected="selected">none</option>');
+            }
+        });
+    });
+</script>
+
+</html>
+
+

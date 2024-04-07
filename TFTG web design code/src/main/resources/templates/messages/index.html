@@ -1,0 +1,328 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/font-awesome-4.7.0/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+
+    <style type="text/css">
+        td {
+            text-align: center;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        .rd {
+            color: green;
+        }
+
+        i {
+            font-size: 20px;
+            padding-right: 4px;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="inc/nav :: nav"></div>
+
+<div class="container-fulid" style="margin-top: 10px;">
+    <!-- 面包屑导航 -->
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1">
+            <label id="nav2">Welcome to TFTG</label>&nbsp;&nbsp;
+            <span style="font-size: 18px;font-weight: 600">A Comprehensive Platform for Human Transcription Factors and Their Targets.</span>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5 col-md-offset-1" style="padding-right: 20px;">
+            <h3 style="font-weight: bold; float: left; color: black;margin-top: 0px;">
+                <span class="glyphicon glyphicon-file iforRight"></span>Introduction
+            </h3>
+            <br>
+            <p style="text-align:justify; text-justify:inter-ideograph;font-size: 18px;margin-top:20px;font-weight: bold;">
+                <i class="fa fa-cog fa-spin"></i> Here, we designed the TFTG database, which aims to provide a large number of available <span class="rd">human TF-target gene resources</span> by multiple strategies, besides performing a comprehensive <span class="rd">functional and epigenetic annotation </span>and <span class="rd">regulatory analysis </span>of TF. </br>
+            </p>
+            <p style="text-align:justify; text-justify:inter-ideograph;font-size: 18px;margin-top:20px;font-weight: bold;">
+                <i class="fa fa-cog fa-spin"></i> The current version for TFTG catalogs a total of <span class="rd"> 1218 human TFs </span> and four TF target gene resource categories that were constructed by processing<span class="rd"> 11,056 TF ChIP-seq</span> datasets,<span class="rd"> 280 TF perturbation RNA-seq </span>datasets, <span class="rd">805 TF motif</span> profiles and more than 5,000 TF-targets related <span class="rd">literatures</span>. In addition, TFTG supports multiple types of TF binding locations on the genome, such as promoter, enhancer, super-enhancer, accessible chromatin and silencer that were identified by processing over 2,000 H3K27ac ChIP-seq and 1,400 ATAC-seq raw data. Especially, TFTG provides four types of TF regulatory analyses for users, including <span class="rd">TF gene set enrichment analysis, TF downstream regulatory analysis, Gene upstream regulatory analysis and Pathway enrichment analysis</span>. TFTG provides a user-friendly interface to <span class="rd">search</span>, <span class="rd">browse</span>, <span class="rd">download </span> and<span class="rd"> visualize </span>information associated with TF regulatory and identification of target genes. We believe that TFTG will become a useful and effective platform for exploring potential functions and regulation of TF in diseases and biological processes.
+            </p>
+        </div>
+        <div class="col-md-5" style="padding:15px;">
+            <div id="carousel-example-generic" class="carousel slide"
+                 data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0"
+                        class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                        <img src="img/lunbo1.png" style="height: 450px;">
+                    </div>
+                    <div class="item">
+                        <img src="img/lunbo2.png" style="height: 450px;">
+                    </div>
+                    <div class="item">
+                        <img src="img/lunbo3.png" style="height: 450px;">
+                    </div>
+                    <div class="item">
+                        <img src="img/lunbo4.png" style="height: 450px;">
+                    </div>
+                    <div class="item">
+                        <img src="img/lunbo5.png" style="height: 450px;">
+                    </div>
+
+                </div>
+
+                <!-- Controls -->
+                <a style="background: none;" class="left carousel-control"
+                   href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span style="color: #003266;" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a> <a style="background: none;" class="right carousel-control"
+                        href="#carousel-example-generic" role="button" data-slide="next">
+                <span style="color: #003266;" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+            </div>
+            <br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div id="borderTop">
+                <h3 style="font-weight: bold; color: black;">
+                    <span class="glyphicon glyphicon-stats"></span> TF-associated Analysis
+                </h3>
+                <br>
+                <div class="col-sm-3">
+                    <div class="thumbnail">
+                        <img src="img/analysis1.png" class="img-thumbnail" style="height: 413px;">
+                        <div class="caption">
+                            <p>
+                                <a style="width:90%;" href="geneAnalysis" type="button" class="btn btn-primary">TF gene set enrichment analysis</a>
+                                <a style="width:8%;padding: 6px;" href="help#2.3.1" type="button" class="btn btn-success">?</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="thumbnail">
+                        <img src="img/analysis2.png" class="img-thumbnail" style="height: 413px;">
+                        <div class="caption">
+                            <p>
+                                <a style="width:90%;" href="networkAnalysis" type="button" class="btn btn-primary">TF downstream regulatory analysis</a>
+                                <a style="width:8%;padding: 6px;" href="help#2.3.2" type="button" class="btn btn-success">?</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="thumbnail">
+                        <img src="img/analysis3.png" class="img-thumbnail" style="height: 413px;">
+                        <div class="caption">
+                            <p>
+                                <a style="width:90%;" href="networkAnalysisGene" type="button" class="btn btn-primary">Gene upstream regulatory analysis</a>
+                                <a style="width:8%;padding: 6px;" href="help#2.3.3" type="button" class="btn btn-success">?</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="thumbnail">
+                        <img src="img/analysis4.png" class="img-thumbnail" style="height: 413px;">
+                        <div class="caption">
+                            <p>
+                                <a style="width:90%;" href="pathwayAnalysis" type="button" class="btn btn-primary">Pathway enrichment analysis</a>
+                                <a style="width:8%;padding: 6px;" href="help#2.3.3" type="button" class="btn btn-success">?</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="borderTop">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 style="font-weight: bold; float: left; color: black;">
+                            <span class="glyphicon glyphicon-stats"></span> Data Statistical Table
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <table class="table table-condensed table-hover">
+                            <tbody>
+                            <tr>
+                                <td rowspan="3">TF(ChIP-seq)</td>
+                                <td>The Number of Sources</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>The Number of TFs</td>
+                                <td>1043</td>
+                            </tr>
+                            <tr>
+                                <td>The Number of Sources</td>
+                                <td>11056</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">TF(Perturbation)</td>
+                                <td>The Number of Samples</td>
+                                <td>280</td>
+                            </tr>
+                            <tr>
+                                <td>The Number of Sources</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>The Number of TFs</td>
+                                <td>166</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">TF(Motif)</td>
+                                <td>The Number of Sources</td>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>The Number of TFs</td>
+                                <td>732</td>
+                            </tr>
+                            <tr>
+                                <td>The Number of Motifs</td>
+                                <td>3850</td>
+                            </tr>
+                            <tr>
+                                <td>SE</td>
+                                <td>The Number of Sources</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>TE</td>
+                                <td>The Number of Sources</td>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td>ATAC</td>
+                                <td>The Number of Sources</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Silencer</td>
+                                <td>The Number of Sources</td>
+                                <td>1</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-5">
+                        <div id="main" style="height: 430px;width: 100%;"></div>
+                    </div>
+                    <div class="col-md-3" style="margin-top: 0px;">
+                        <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=5thoicku1e9&amp;m=7&amp;c=e63100&amp;cr1=ffffff&amp;f=arial&amp;l=0&amp;bv=90&amp;lx=-420&amp;ly=420&amp;hi=20&amp;he=7&amp;hc=a8ddff&amp;rs=80" async="async"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="borderTop">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>
+                            <span class="glyphicon glyphicon-hand-right"></span><a
+                                href="http://www.licpathway.net/sedb/">SEdb</a><br>
+                            <span>SEdb: the comprehensive human Super-Enhancer database</span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-hand-right"></span><a
+                                href="http://www.licpathway.net/ENdb/index.php">ENdb</a><br>
+                            <span>ENdb: an experimentally supported enhancer database for human and mouse</span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-hand-right"></span><a
+                                href="http://www.licpathway.net/SEanalysis/">SEanalysis</a><br>
+                            <span>SEanalysis: a web tool for super-enhancer associated regulatory analysis</span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-hand-right"></span><a
+                                href="http://www.licpathway.net/ATACdb/">ATACdb</a><br>
+                            <span>ATACdb: a comprehensive human chromatin accessibility database</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>
+                            <span class="glyphicon glyphicon-hand-right"></span><a
+                                href="http://www.licpathway.net/KnockTF/index.html">KnockTF</a><br>
+                            <span>KnockTF: a comprehensive human gene expression profile database with knockdown/knockout of transcription factors</span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-hand-right"></span><a href="">TRCirc</a><br>
+                            <span>TRCirc: a resource for transcriptional regulation information of circRNAs</span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-hand-right"></span><a
+                                href="http://bio.licpathway.net/TRlnc/view/index">TRlnc</a><br>
+                            <span>TRlnc: a comprehensive database of human transcriptional regulation of lncRNAs</span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-hand-right"></span><a
+                                href="http://www.licpathway.net/VARAdb/">VARAdb</a><br>
+                            <span>VARAdb: a variation annotation database for human</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+
+</body>
+<script type="text/javascript">
+    $('.carousel').carousel({
+        interval: 2000
+    })
+</script>
+
+<script th:src="@{/js/echartOption.js}"></script>
+<script type="text/javascript">
+    index_bar()
+</script>
+</html>
+
+

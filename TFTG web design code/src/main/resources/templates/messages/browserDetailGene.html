@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap-multiselect.css}"/>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+    <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>-->
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+    <!-- Include the plugin's CSS and JS: -->
+    <script type="text/javascript" th:src="@{/js/bootstrap-multiselect.js}"></script>
+    <style>
+        .infotab {
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body data-spy="scroll" data-target="#myScrollspy">
+<div th:replace="inc/nav :: nav"></div>
+<div class="container-fulid" style="margin-top: 10px;margin-bottom: 30px;">
+    <div class="row">
+        <div class="col-xs-2" id="myScrollspy">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        ChIP-seq_class
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="nav nav-tabs nav-stacked">
+                        <li id="seli" class="active"><a href="#section-1" onclick="method('SE')">C_SE <span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on ChIP-seq bind to the super-enhancers, a distal regulatory element of the gene."></span></a></li>
+                        <li id="teli"><a href="#" onclick="method('TE')">C_TE <span class="glyphicon glyphicon-question-sign" title="The binding sites based on TF ChIP-seq bind to the enhancers, a distal regulatory element of the gene."></span></a></li>
+                        <li id="atacli"><a href="#" onclick="method('ATAC')">C_ATAC <span class="glyphicon glyphicon-question-sign" title="The binding sites based on TF ChIP-seq bind to the accessible chromatin regions associated with genes."></span></a></li>
+                        <li id="silencerli"><a href="#" onclick="method('Silencer')">C_Silencer <span class="glyphicon glyphicon-question-sign" title="The binding sites based on TF ChIP-seq bind to the silencers regions."></span></a></li>
+                        <li id="promoterli"><a href="#" onclick="method('Promoter')">C_Promoter <span class="glyphicon glyphicon-question-sign" title="The binding sites based on TF ChIP-seq bind to the promoters of genes."></span></a></li>
+                        <li id="betali"><a href="#" onclick="method('BETA')">C_BETA <span class="glyphicon glyphicon-question-sign" title="Using BETA method on TF ChIP-seq data to identify target genes."></span></a></li>
+                        <li id="genemapperli"><a href="#" onclick="method('Genemapper')">C_Genemapper <span class="glyphicon glyphicon-question-sign" title="Using ROSE geneMapper.py script on TF ChIP-seq data to identify target genes."></span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Perturbation_class
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="nav nav-tabs nav-stacked">
+                        <li id="knockli"><a href="#" onclick="method('Knock')">Perturbation <span class="glyphicon glyphicon-question-sign" title="Observing the expression changes of genes before and after the perturbation of TFs to identify target genes."></span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Curate_class
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="nav nav-tabs nav-stacked">
+                        <li id="curateli"><a href="#" onclick="method('Curate')">Curate <span class="glyphicon glyphicon-question-sign" title="Literature-supported TF target genes were collected from several databases."></span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Motif_class
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="nav nav-tabs nav-stacked">
+                        <li id="mseli"><a href="#" onclick="method('M_SE')">M_SE <span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in the super-enhancers, a distal regulatory element of the gene."></span></a></li>
+                        <li id="mteli"><a href="#" onclick="method('M_TE')">M_TE <span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in the enhancers, a distal regulatory element of the gene."></span></a></li>
+                        <li id="matacli"><a href="#" onclick="method('M_ATAC')">M_ATAC <span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in the accessible chromatin regions associated genes."></span></a></li>
+                        <li id="msilencerli"><a href="#" onclick="method('M_Silencer')">M_Silencer <span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in silencers a distal regulatory element of the gene."></span></a></li>
+                        <li id="mpromoterli"><a href="#" onclick="method('M_Promoter')">M_Promoter <span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in the promoter regions of genes."></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="row">
+                <div class="col-xs-6">
+                    <table class="table table-hover table-striped">
+                        <caption style="font-size: xx-large;margin-top: -10px;padding-top: 0px;">Gene Infomation
+                        </caption>
+                        <tbody>
+                        <tr>
+                            <td class="infotab">Gene name:</td>
+                            <td id="gnum1"></td>
+                        </tr>
+                        <tr>
+                            <td class="infotab">Gene ID:</td>
+                            <td id="gnum2"></td>
+                        </tr>
+                        <tr>
+                            <td class="infotab">Gene biotype:</td>
+                            <td id="gnum3"></td>
+                        </tr>
+                        <tr>
+                            <td class="infotab">Gene source:</td>
+                            <td id="gnum4"></td>
+                        </tr>
+                        <tr>
+                            <td class="infotab">Chr:</td>
+                            <td id="gnum5"></td>
+                        </tr>
+                        <tr>
+                            <td class="infotab">Start:</td>
+                            <td id="gnum6"></td>
+                        </tr>
+                        <tr>
+                            <td class="infotab">End:</td>
+                            <td id="gnum7"></td>
+                        </tr>
+                        <tr>
+                            <td class="infotab">Strand:</td>
+                            <td id="gnum8"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <div class="thumbnail">
+                        <img src="img/SE_cjx.png" id="imgs" style="background-color: lightcyan;height: 343px;"
+                             class="img-thumbnail">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <form class="form-horizontal" method="POST">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">TF Name</label>
+                        <div class="col-sm-4" id="tfSelect">
+                            <select id="example-tf"></select>
+                        </div>
+                        <div id="tfchange">
+                            <label class="col-sm-2 control-label">Biosample name</label>
+                            <div class="col-sm-4" id="cellSelect">
+                                <select id="example-cell" name="cell[]" multiple="multiple"></select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" id="table">
+                    <table id="runtable" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>SampleID</th>
+                            <th>Chr</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Tf name</th>
+                            <th>Biosample name specific</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="inc/footer :: footer"></div>
+</body>
+
+<script th:src="@{/js/browser.js}"></script>
+
+<script th:inline="javascript">
+    var gene = [[${gene}]];
+    var symbol = [[${symbol}]];
+    setgene(gene)
+    geneinfo(gene)
+    var cellData = getCell(symbol);
+    TfMult(symbol, gene, cellData[0].label)
+    CellMult(cellData)
+    se(symbol, gene, cellData[0].label);
+
+</script>
+
+</html>

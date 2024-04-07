@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+    <script type="text/javascript" th:src="@{/js/dataTool.min.js}"></script>
+    <style>
+        .libg{
+            background-color: #17233a !important;
+            color: #fff !important;
+            font-size: large !important;
+        }
+        .libg:hover{
+            background-color: #4265a7 !important;
+            color: #fff !important;
+            font-size: large !important;
+        }
+        .panel-primary {
+            border-color: #17233a !important;
+        }
+        .panel-heading {
+            color: #fff;
+            background-color: #17233a !important;
+            border-color: #17233a !important;
+        }
+        .buta{
+            background-color: #17233a !important;
+            border-color: #17233a !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="inc/nav :: nav"></div>
+
+<div class="container-fulid" style="margin-top: 10px;">
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1">
+            <h1 style="font-size: 40px;font-weight: 600;"><span class="glyphicon glyphicon-list"></span> Result of TF gene set enrichment analysis</h1>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-2 col-md-offset-1">
+            <a href="#" class="libg list-group-item" onclick="tab(this)" th:each="item:${methods}" th:text="${item}"></a>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title" id="method" style="font-size: large !important;"></h3>
+                </div>
+                <div class="panel-body">
+                    <a type="button" data-toggle="modal" data-target="#bubbleModal" class="btn btn-primary buta" onclick="bubble()"><img src="img/qipao.png" style="width: 20px;margin-top: -5px;margin-right: 5px;">Bubble Chart</a>
+                    <a type="button" data-toggle="modal" data-target="#barModal" class="btn btn-primary buta" onclick="bar()"><img src="img/bar.png" style="width: 20px;margin-top: -5px;margin-right: 5px;"> Bar Chart</a>
+                    <br><br>
+                    <table id="analysisResult" class="table table-striped table-bordered" style="width:100%;margin-top: 15px;">
+                        <thead>
+                        <tr>
+                            <th>TF<span class="glyphicon glyphicon-question-sign"></span></th>
+                            <th>Sample ID</th>
+                            <!--<th>Method</th>-->
+                            <th>Biosample name</th>
+                            <th>Annotated genes</th>
+                            <th>Annotated gene number</th>
+                            <th>P_Value<span class="glyphicon glyphicon-question-sign" title="Hypergeometric P value."></span></th>
+                            <th>FDR<span class="glyphicon glyphicon-question-sign" title="False discovery rate(FDR) : the corrected p-value."></span></th>
+                            <th>Venn</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<span id="userID" style="display: none"></span>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="bubbleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="bubbleModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="bubble" style="width: 569px;height: 500px;"></div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="barModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="barModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="bar" style="width: 569px;height: 500px;"></div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div th:replace="inc/nav :: vennmodel"></div>
+<div th:replace="inc/footer :: footer"></div>
+</body>
+<script th:src="@{/js/search.js}"></script>
+<script th:src="@{/js/browser.js}"></script>
+<script th:inline="javascript">
+    function aaa() {
+        $("#Sample_02_3489a").show()
+    }
+    var methods = [[${methods}]];
+    var userID = [[${userID}]];
+    var input = [[${input}]];
+
+    $("#userID").html(userID);
+    function tab(obj) {
+        console.log(obj)
+        method = $(obj).text();
+
+        console.log("*******")
+        if (method==""){
+            method = methods[0]
+        }
+        if (method=="C_SE"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The TF binding sites based on ChIP-seq bind to the super-enhancers, a distal regulatory element of the gene.'>");
+            method="SE";
+        }else if (method=="C_TE"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The binding sites based on TF ChIP-seq bind to the enhancers, a distal regulatory element of the gene.'>");
+            method="TE";
+        }else if (method=="C_Silencer"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The binding sites based on TF ChIP-seq bind to the accessible chromatin regions associated with genes.'>");
+            method="Silencer";
+        }else if (method=="C_ATAC"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The binding sites based on TF ChIP-seq bind to the silencers, a distal regulatory element of the gene.'>");
+            method="ATAC";
+        }else if (method=="C_Promoter"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The binding sites based on TF ChIP-seq bind to the promoters of genes.'>");
+            method="Promoter";
+        }else if (method=="C_BETA"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='Using BETA method on TF ChIP-seq data to identify target genes.'>");
+            method="BETA";
+        }else if (method=="C_Genemapper"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='Using ROSE geneMapper.py script on TF ChIP-seq data to identify target genes.'>");
+            method="Genemapper";
+        }else if (method=="Perturbation"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='Observing the expression changes of genes before and after the perturbation of TFs to identify target genes.'>");
+            method="Knock"
+        }else if (method=="Curate"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='Literature-supported TF target genes were collected from several databases.'>");
+        }else if (method=="M_SE"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='super-enhancers, a distal regulatory element of the gene.'>");
+        }else if (method=="M_TE"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The TF binding sites based on Motif occur in the enhancers, a distal regulatory element of the gene.'>");
+        }else if (method=="M_Silencer"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The TF binding sites based on Motif occur in silencers a distal regulatory element of the gene.'>");
+        }else if (method=="M_ATAC"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The TF binding sites based on Motif occur in the accessible chromatin regions associated genes.'>");
+        }else if (method=="M_Promoter"){
+            $("#method").html("<span id='methodid'>"+method+"</span>"+"<img src='img/what.png' style='width: 20px;' title='The TF binding sites based on Motif occur in the promoter regions of genes.'>");
+        }
+        console.log("aaaa:"+method+":ooooo"+":"+userID)
+        anatable(userID,method)
+    }
+    tab();
+
+    function bar() {
+        $.ajax({
+            url: "analysisgetresultgraph",
+            type: "get",
+            data: {"userID": userID,"method":method},
+            async: true,
+            success: function (res) {
+                var barChart = echarts.init(document.getElementById('bar'));
+                option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross'
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {readOnly: false,show: true,title: "dataView"},
+                            magicType: {show: true, type: ['line', 'bar' ],title: ['line', 'bar']},
+                            restore: {show: true,title: "Restore"},
+                            saveAsImage: {show: true,title: "Save"}
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    yAxis: {
+                        type: 'category',
+                        axisLabel: {
+                            interval:0,
+                            rotate:40
+                        },
+                        data: res.namelist
+                    },
+                    xAxis: {
+                        name: '-log10(P-value)',
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: res.numlist,
+                            type: 'bar',
+                            showBackground: true,
+                            backgroundStyle: {
+                                color: 'rgba(180, 180, 180, 0.2)'
+                            }
+                        }
+                    ]
+                };
+                barChart.setOption(option);
+            },
+            dataType: "json"
+        });
+    }
+
+    /*
+    * 韦恩图
+    * */
+    function venngraph(tf, sampleid, method, core) {
+        $("#venngraph").empty();
+        var corearr = core.split(";");
+        var coresize = corearr.length
+
+        var div = "<div id='main' style='width: 569px;height: 500px;'></div>";
+        $("#venngraph").html(div);
+        $.ajax({
+            url: "venngraph",
+            type: "get",
+            data: {"tf": tf, "sampleid": sampleid, "method": method, "input": input, "core": coresize},
+            async: true,
+            success: function (res) {
+                graph(res.data);
+            },
+            dataType: "json"
+        });
+    }
+
+    function graph(dataset) {
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b}:{c}"
+            },
+            toolbox: {
+                x: 'left',
+                show: true,
+                feature: {
+                    restore: {show: true, title: 'Reset'},
+                    saveAsImage: {show: true, title: 'Download'}
+                }
+            },
+            calculable: false,
+            series: [
+                {
+                    name: 'venn',
+                    type: 'venn',
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                textStyle: {
+                                    fontFamily: 'Arial, Verdana, sans-serif',
+                                    fontSize: 16,
+                                    fontStyle: 'italic',
+                                    fontWeight: 'bolder'
+                                }
+                            },
+                            labelLine: {
+                                show: false,
+                                length: 10,
+                                lineStyle: {
+                                    // color: 各异,
+                                    width: 1,
+                                    type: 'solid'
+                                }
+                            }
+                        },
+                        emphasis: {
+                            color: '#cc99cc',
+                            borderWidth: 3,
+                            borderColor: '#996699'
+                        }
+                    },
+                    data: dataset
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+</script>
+
+
+<script type="text/javascript" th:inline=none>
+    function bubble(){
+        var method = $("#methodid").text();
+        var userID = $("#userID").text();
+
+        $.ajax({
+            url: "analysisgetresultgraphbulle",
+            type: "get",
+            data: {"userID": userID,"method":method},
+            async: true,
+            success: function (res) {
+                var bubbleChart = echarts.init(document.getElementById('bubble'));
+                var data=res.summ,
+                    option = {
+                        title: {
+                            text: '',
+                            subtext: ''
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross'
+                            }
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataView: {readOnly: false,show: true,title: "dataView"},
+                                magicType: {show: true, type: ['line', 'bar' ],title: ['line', 'bar']},
+                                restore: {show: true,title: "Restore"},
+                                saveAsImage: {show: true,title: "Save"}
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: {
+                            name: '-log10(P-value)',
+                            type: 'value'
+                        },
+                        yAxis: {
+                            type: 'category',
+                            axisLabel: {
+                                interval:0,
+                                rotate:40
+                            },
+                            data: res.namelist
+                        },
+                        series: [
+                            {
+                                type: 'scatter',
+                                data: data,
+                                symbolSize: function (data) {
+                                    // return parseInt(data[2]+"0");
+                                    return parseInt(data[2]);
+                                },
+                            }
+                        ]
+                    };
+                bubbleChart.setOption(option);
+            },
+            dataType: "json"
+        });
+    }
+</script>
+</html>

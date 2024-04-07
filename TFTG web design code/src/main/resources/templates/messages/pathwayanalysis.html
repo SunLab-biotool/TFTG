@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-multiselect.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap-multiselect.js}"></script>
+    <style type="text/css">
+
+        th {
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        .panel-heading {
+            height: 50px;
+            background-color: #317190 !important;
+        }
+
+        h4 {
+            font-size: 30px !important;
+            font-weight: bold !important;
+            color: #fff !important;
+            margin: 0px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="inc/nav :: nav"></div>
+
+<div class="container-fulid" style="margin-top: 10px;">
+    <!-- 面包屑导航 -->
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1" style="margin-top: 30px;margin-bottom: 30px;">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4><span class="glyphicon glyphicon-th-list" style="color: #ffffff;"></span>
+                    Pathway enrichment analysis</h4></div>
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        <form role="form" action="runpathwayanalysis">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered">
+                                        <caption style="font-weight: 700; color: #333;">
+                                            Databases Select All <input type="checkbox" id="all">
+                                        </caption>
+
+                                        <tbody id="list">
+                                        <tr style="text-align: start;">
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="KEGG"
+                                                    checked="checked">KEGG
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="NetPath" checked="checked">NetPath
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="Reactome" checked="checked">Reactome
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="WikiPathways"
+                                                    checked="checked">WikiPathways
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="PANTHER" checked="checked">PANTHER
+                                            </label></td>
+
+                                        </tr>
+                                        <tr style="text-align: start;">
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="PID" checked="checked">PID
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="HumanCyc" checked="checked">HumanCyc
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="CTD" checked="checked">CTD
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="SMPDB" checked="checked">SMPDB
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="databases" value="INOH" checked="checked">INOH
+                                            </label></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-3">Genes</label><br>
+                                <div class="col-sm-12">
+                                    <label for="optionOne" style="display: block;"><input checked="checked" type="radio"
+                                                                                          class="cb-radio"
+                                                                                          id="optionOne"
+                                                                                          value="textarea"
+                                                                                          name="option"/>Paste your
+                                        data:</label>
+                                    <textarea class="form-control" style="height: 150px;" name="genes"
+                                              id="genes"></textarea>
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="col-sm-12">Threshold</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="threshold" class="form-control" name="threshold" value="0.05"
+                                           placeholder="0.05">
+                                </div>
+                                <div class="col-sm-10">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id="adjust" value="1" name="adjust">
+                                        FDR Adjust<span class="glyphicon glyphicon-question-sign"
+                                                        title="False discovery rate (FDR) : the corrected p-value."></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 15px;">
+                                <label class="col-sm-12">GeneNumber</label><br>
+                                <label for="min" class="col-sm-1"
+                                       style="margin-right: inherit;margin-top: 5px;">Min: </label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="min" name="min" value="10"
+                                           placeholder="10">
+                                </div>
+                                <label for="max" class="col-sm-1"
+                                       style="margin-right: inherit;margin-top: 5px;">Max: </label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="max" name="max" value="300"
+                                           placeholder="300">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="text-align: left;margin-left: 0px;">
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-default" id="example" onclick="examplebtn()">
+                                        <span style="color: #000;"><b>Example</b></span>
+                                    </button>
+                                    <button type="submit" class="btn btn-default">
+                                        <span style="color: #000;"><b>Analyse</b></span>
+                                    </button>
+                                    <button type="reset" class="btn btn-default">
+                                        <span style="color: #000;"><b>Reset</b></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="text-align: center"><img src="img/analysis3_1.png"></div>
+                        <h2 style="color: red">Function introduction</h2>
+                        <p>If users input an gene set (gene symbol), TFTG will identify enriched in up to 10 <span
+                                style="color: red">pathway</span> databases and the <span style="color: red">TFs</span>
+                            with their <span style="color: red">target genes</span> in the pathway.</p>
+                        <p><span style="color: red">1) Databases: </span>Select at least one database of pathways.</p>
+                        <p><span style="color: red">2) Genes: </span>Input a gene symbol set.</p>
+                        <p><span style="color: red">3) Threshold: </span>Set P-Value and FDR thresholds.</p>
+                        <p><span style="color: red">4) GeneNumber: </span>Limit the number range of genes in pathways.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+
+</body>
+<script type="text/javascript">
+    $('.carousel').carousel({
+        interval: 2000
+    })
+
+    function examplebtn() {
+        $("#genes").val("C3orf21\r\n" + "GSDMC\r\n" + "NR1D1\r\n" + "ZNF532");
+    }
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#all").click(function () {
+            if (this.checked) {
+                $("#list :checkbox").prop("checked", true);
+            } else {
+                $("#list :checkbox").prop("checked", false);
+            }
+        });
+    });
+    /*celllineMults();*/
+</script>
+</html>
+
+

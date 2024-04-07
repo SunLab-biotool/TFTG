@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-multiselect.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap-multiselect.js}"></script>
+    <style type="text/css">
+
+        th {
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        .panel-heading {
+            height: 50px;
+            background-color: #317190 !important;
+        }
+
+        h4 {
+            font-size: 30px !important;
+            font-weight: bold !important;
+            color: #fff !important;
+            margin: 0px;
+        }
+
+    </style>
+</head>
+<body>
+<div th:replace="inc/nav :: nav"></div>
+
+<div class="container-fulid" style="margin-top: 10px;">
+    <!-- 面包屑导航 -->
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4><span class="glyphicon glyphicon-th-list" style="color: #ffffff;"></span>
+                    TF gene set enrichment analysis</h4></div>
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        <!--<form role="form" action="analysis1">-->
+                        <form method="post" role="form" class="form-horizontal" id="app" action="analysis1"
+                              enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered">
+                                        <caption style="font-weight: 700; color: #333;">
+                                            Method Select All <input type="checkbox" id="all">
+                                        </caption>
+
+                                        <tbody id="list">
+                                        <tr style="text-align: start;">
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="C_SE" value="SE"
+                                                    checked="checked">C_SE
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="C_TE" value="TE"
+                                                    checked="checked">C_TE
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="C_ATAC" value="ATAC"
+                                                    checked="checked">C_ATAC
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="C_Silencer" value="Silencer"
+                                                    checked="checked">C_Silencer
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="C_Promoter" value="Promoter"
+                                                    checked="checked">C_Promoter
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="C_BETA" value="BETA"
+                                                    checked="checked">C_BETA
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="C_Genemapper" value="Genemapper"
+                                                    checked="checked">C_Genemapper
+                                            </label></td>
+                                        </tr>
+                                        <tr style="text-align: start;">
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="Curate" value="Curate"
+                                                    checked="checked">Curate
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="Knock" value="Knock"
+                                                    checked="checked">Perturbation
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="M_SE" value="M_SE"
+                                                    checked="checked">M_SE
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="M_TE" value="M_TE"
+                                                    checked="checked">M_TE
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="M_ATAC" value="M_ATAC"
+                                                    checked="checked">M_ATAC
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="M_Silencer" value="M_Silencer"
+                                                    checked="checked">M_Silencer
+                                            </label></td>
+                                            <td><label class="checkbox-inline"> <input
+                                                    type="checkbox" name="method" id="M_Promoter" value="M_Promoter"
+                                                    checked="checked">M_Promoter
+                                            </label></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-3">Genes</label><br>
+                                <div class="col-sm-12">
+                                    <label for="optionOne" style="display: block;"><input checked="checked" type="radio"
+                                                                                          class="cb-radio"
+                                                                                          id="optionOne"
+                                                                                          value="textarea"
+                                                                                          name="option"/>Paste your
+                                        data:</label>
+                                    <textarea class="form-control" style="height: 150px;" name="genes"
+                                              id="genes"></textarea>
+                                    <br>
+                                    <label for="optionTwo" style="display:inline;"><input type="radio" class="cb-radio"
+                                                                                          id="optionTwo" value="file"
+                                                                                          name="option"/>
+                                        Upload a file: <input id="file" type="file" name="file"
+                                                              style="display:inherit;"/></label>
+                                    <button type="example" class="btn btn-info btn-sm">
+                                        <span><b><a style="color: #fff;" href="file/analysis1.txt"
+                                                    download="genes-example">Example of Upload File</a></b></span>
+                                    </button>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <br>
+                                <label class="col-sm-12">Threshold</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="threshold" class="form-control" name="threshold" value="0.05"
+                                           placeholder="0.05">
+                                </div>
+                                <div class="col-sm-10">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id="adjust" value="1" name="adjust">
+                                        FDR Adjust<span class="glyphicon glyphicon-question-sign"
+                                                        title="False discovery rate (FDR) : the corrected p-value."></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-12" style="margin-top: 15px;">GeneNumber</label><br>
+                                <label for="min" class="col-sm-1"
+                                       style="margin-right: inherit;margin-top: 5px;">Min: </label>
+                                <div class="col-sm-3" style="margin-left: -15px;">
+                                    <input type="text" class="form-control" id="min" name="min" value="10"
+                                           placeholder="10">
+                                </div>
+                                <label for="max" class="col-sm-1"
+                                       style="margin-right: inherit;margin-top: 5px;">Max: </label>
+                                <div class="col-sm-3" style="margin-left: -15px;">
+                                    <input type="text" class="form-control" id="max" name="max" value="300"
+                                           placeholder="300">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="min" class="col-sm-12" style="margin-right: inherit;margin-top: 15px;">Biosample name</label>
+                                <div class="col-sm-12">
+                                    <select id="celllineMults" name="cell" multiple="multiple"></select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="text-align: left;margin-left: 0px;">
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-default" onclick="examplebtn()" id="example">
+                                        <span style="color: #000;"><b>Example</b></span>
+                                    </button>
+                                    <button type="submit" class="btn btn-default">
+                                        <span style="color: #000;"><b>Analyse</b></span>
+                                    </button>
+                                    <button type="reset" class="btn btn-default">
+                                        <span style="color: #000;"><b>Reset</b></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="text-align: center"><img src="img/analysis1_1.png"></div>
+                        <h2 style="color: red">Function introduction</h2>
+                        <p>If users input an gene set (gene symbol), TFTG will execute <span style="color: red">hypergeometric test</span>
+                            between the submitted gene set and target gene set of each TF.</p>
+                        <p><span style="color: red">1) Method: </span>Select at least one method of TF target genes.</p>
+                        <p><span style="color: red">2) Genes: </span>Input a gene symbol set.</p>
+                        <p><span style="color: red">3) Threshold: </span>Set P-Value and FDR thresholds.</p>
+                        <p><span style="color: red">4) GeneNumber: </span>Limit the number range of genes in TF target
+                            genes.</p>
+                        <p><span style="color: red">5) Biosample name: </span>Select one sample biosample name or more.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+</body>
+<script type="text/javascript">
+    $('.carousel').carousel({
+        interval: 2000
+    })
+
+    function examplebtn() {
+        $("#genes").val("COL10A1"+"\r\nTFF1"+"\r\nRP11-40C6.2"+"\r\nMMP11"+"\r\nCOL11A1"+"\r\nAP000349.2"+"\r\nUBE2C"+"\r\nRP5-940J5.9"+"\r\nAGR3"+"\r\nS100P"+"\r\nAGR2"+"\r\nCST1"+"\r\nMTND4P12"+"\r\nKIAA0101"+"\r\nTOP2A"+"\r\nCENPF"+"\r\nRRM2"+"\r\nLRRC15"+"\r\nNEK2"+"\r\nAP003391.1"+"\r\nIGHG4"+"\r\nNAT1"+"\r\nMYBL2"+"\r\nTPX2"+"\r\nPITX1"+"\r\nPKMYT1"+"\r\nBIRC5"+"\r\nMISP"+"\r\nCOMP"+"\r\nGJB2"+"\r\nCXCL10"+"\r\nCDC20"+"\r\nHSPB1P1"+"\r\nS100A14"+"\r\nTNNT1"+"\r\nUBE2T"+"\r\nPTTG1"+"\r\nTK1"+"\r\nRP11-667K14.4"+"\r\nNUSAP1"+"\r\nMMP9"+"\r\nGPRC5A"+"\r\nASF1B"+"\r\nCCNB2"+"\r\nCEACAM6"+"\r\nZACN"+"\r\nSLC44A4"+"\r\nMKI67"+"\r\nHMGN1P37"+"\r\nEEF1A2"+"\r\nTUBB3"+"\r\nU91328.1"+"\r\nZWINT"+"\r\nCKS2"+"\r\nNKAIN1"+"\r\nAC093850.2"+"\r\nKIF20A"+"\r\nUHRF1"+"\r\nFN1"+"\r\nCCNB1"+"\r\nIGHGP"+"\r\nRNU4-1"+"\r\nRP11-316M1.12"+"\r\nFOXA1"+"\r\nPYCR1"+"\r\nPPAPDC1A"+"\r\nEIF5AP4"+"\r\nHOXC10"+"\r\nFOXM1"+"\r\nC15orf48"+"\r\nCYP2B7P"+"\r\nINHBA"+"\r\nEPCAM"+"\r\nAC066694.1"+"\r\nPBK"+"\r\nHN1"+"\r\nLMNB1"+"\r\nCOL1A1"+"\r\nCDK1"+"\r\nPRR15"+"\r\nIGHG1"+"\r\nANLN"+"\r\nUBE2SP2"+"\r\nCEP55"+"\r\nMELK"+"\r\nAURKA"+"\r\nNUF2"+"\r\nCXCL9"+"\r\nMAL2"+"\r\nDEGS2"+"\r\nKIF4A"+"\r\nTROAP"+"\r\nKIFC1"+"\r\nCRABP2"+"\r\nTFF3"+"\r\nTSPAN1"+"\r\nAC239868.2"+"\r\nMMP13"+"\r\nAC239868.3"+"\r\nTPD52"+"\r\nLAMP5"+"\r\nSDC1"+"\r\nCDCA5"+"\r\nAURKB"+"\r\nIGHG3"+"\r\nCDKN3"+"\r\nDTL"+"\r\nCACNG4"+"\r\nBUB1"+"\r\nFAM111B"+"\r\nPAFAH1B3"+"\r\nPLK1"+"\r\nRMI2"+"\r\nESR1"+"\r\nPOSTN"+"\r\nKIF2C"+"\r\nSMIM22"+"\r\nKIF11"+"\r\nANXA9"+"\r\nCTD-2224J9.4"+"\r\nCRIP1"+"\r\nIFI6"+"\r\nCXCL13"+"\r\nDLGAP5"+"\r\nHMMR"+"\r\nIQGAP3"+"\r\nZG16B"+"\r\nCENPM"+"\r\nHIST1H2BD"+"\r\nCTXN1"+"\r\nRP11-498C9.13"+"\r\nHMGN1P36"+"\r\nSTARD10"+"\r\nCDC6"+"\r\nDLEU2_6"+"\r\nHMGB3"+"\r\nRP11-649E7.5"+"\r\nCDCA8"+"\r\nNDC80"+"\r\nMUC1"+"\r\nRP11-70C1.3"+"\r\nRNU1-106P"+"\r\nZMYND10"+"\r\nSPP1"+"\r\nCDCA3"+"\r\nGATA3"+"\r\nNCAPG"+"\r\nNCAPH"+"\r\nASPM"+"\r\nFAM83D"+"\r\nCENPU"+"\r\nHNRNPCP2"+"\r\nSLC39A6"+"\r\nEXO1"+"\r\nSUSD3"+"\r\nAPOBEC3B"+"\r\nGRP"+"\r\nISG15"+"\r\nFNDC1"+"\r\nTTC39A"+"\r\nHOXC13"+"\r\nKPNA2"+"\r\nSPC25"+"\r\nAC005943.6"+"\r\nPAQR4"+"\r\nPKIB"+"\r\nHJURP"+"\r\nPRC1"+"\r\nCOL3A1"+"\r\nSQLE"+"\r\nUBD"+"\r\nCXCL11"+"\r\nCCDC64"+"\r\nFAM83H-AS1"+"\r\nCFB"+"\r\nMAD2L1"+"\r\nHIST1H4H"+"\r\nCTHRC1"+"\r\nFCGR1A"+"\r\nRET"+"\r\nGALNT6"+"\r\nSLC9A3R1"+"\r\nBUB1B"+"\r\nSBK1"+"\r\nPRSS8"+"\r\nPPIAP22"+"\r\nRAD51"+"\r\nOLR1"+"\r\nCA12"+"\r\nWISP1"+"\r\nTYMS"+"\r\nTMEM132A"+"\r\nKIF23"+"\r\nAP1M2"+"\r\nBCAS4"+"\r\nRAB25"+"\r\nKRT18"+"\r\nSDS"+"\r\nASPN"+"\r\nMXRA5"+"\r\nRACGAP1"+"\r\nCDC45"+"\r\nARAP1-AS1"+"\r\nHIST1H3H"+"\r\nSORD2P"+"\r\nTLCD1"+"\r\nSRP9P1"+"\r\nFAM64A"+"\r\nMETRN"+"\r\nCENPA"+"\r\nHPN"+"\r\nSPDEF"+"\r\nMMP1"+"\r\nBGN"+"\r\nAPOC4-APOC2"+"\r\nNUP210"+"\r\nESRP1"+"\r\nESM1"+"\r\nSORD"+"\r\nRP11-10G12.1"+"\r\nSPC24"+"\r\nEPN3"+"\r\nCCNA2"+"\r\nRP11-386G11.10"+"\r\nGINS1"+"\r\nUBE2S"+"\r\nTRIP13"+"\r\nF12"+"\r\nRP11-161H23.5"+"\r\nPRLR"+"\r\nC19orf33"+"\r\nEZR"+"\r\nCELSR1"+"\r\nAKR7A3"+"\r\nKRT8"+"\r\nCDT1"+"\r\nE2F1"+"\r\nDBNDD1"+"\r\nTTK"+"\r\nAPOC2"+"\r\nCD24"+"\r\nC9orf116"+"\r\nHN1L"+"\r\nHIST1H2BK"+"\r\nMCM4"+"\r\nSPAG5"+"\r\nFAM83H"+"\r\nRP11-442H21.2"+"\r\nLOXL1"+"\r\nTRIM29"+"\r\nPLIN5"+"\r\nEFEMP1"+"\r\nWASF3"+"\r\nPHYHIP"+"\r\nTMEM220"+"\r\nRP11-350N15.4"+"\r\nCYR61"+"\r\nSLC26A10"+"\r\nCNTNAP3"+"\r\nPFKFB1"+"\r\nHOXD4"+"\r\nSOSTDC1"+"\r\nCAPN11"+"\r\nALDH1A2"+"\r\nCREB5"+"\r\nLTBP4"+"\r\nSH3BP5-AS1"+"\r\nMT1L"+"\r\nADAMTS9-AS1"+"\r\nCNR1"+"\r\nRASIP1"+"\r\nMYLK"+"\r\nKCNMB1"+"\r\nHOXA3"+"\r\nDST"+"\r\nTACR1"+"\r\nPKD1P1"+"\r\nLARP6"+"\r\nC10orf54"+"\r\nDENND2A"+"\r\nASMTL-AS1"+"\r\nNRG2"+"\r\nLINC01485"+"\r\nC10orf128"+"\r\nHOXA7"+"\r\nMAB21L1"+"\r\nCYGB"+"\r\nPGA3"+"\r\nHRASLS5"+"\r\nMMRN2"+"\r\nGYPC"+"\r\nUSP32P1"+"\r\nADGRF5"+"\r\nDCN"+"\r\nHPSE2"+"\r\nADIRF-AS1"+"\r\nPTN"+"\r\nSGK2"+"\r\nBMP6"+"\r\nACSL1"+"\r\nCYP26B1"+"\r\nDENND3"+"\r\nGPRASP1"+"\r\nMYEOV"+"\r\nPDE3B"+"\r\nHERC2P9"+"\r\nNAT8L"+"\r\nRP11-386I14.4"+"\r\nNLRP1"+"\r\nSOCS2"+"\r\nNTRK3"+"\r\nABI3BP"+"\r\nPNPLA2"+"\r\nRP4-800G7.2"+"\r\nRP11-175B9.3"+"\r\nCCDC3"+"\r\nSPARCL1"+"\r\nHOXA9"+"\r\nCOX7A1"+"\r\nFADS3"+"\r\nISM1"+"\r\nKLF9"+"\r\nGNAI1"+"\r\nDTX1"+"\r\nCXCL12"+"\r\nLILRB5"+"\r\nFAM162B"+"\r\nROPN1B"+"\r\nRBMS3"+"\r\nAVPR2"+"\r\nAPCDD1"+"\r\nLINC00961"+"\r\nMOCS1"+"\r\nFZD4"+"\r\nRP11-175K6.2"+"\r\nSEC31B"+"\r\nPKP1"+"\r\nABLIM3"+"\r\nPTGDS"+"\r\nELF5"+"\r\nADGRD1"+"\r\nFOLR1"+"\r\nANXA1"+"\r\nDNASE1L3"+"\r\nTBX15"+"\r\nPPAP2B"+"\r\nPLSCR4"+"\r\nTWIST1"+"\r\nLINC01140"+"\r\nMCAM"+"\r\nFAM110D"+"\r\nCCDC178"+"\r\nAC093110.3"+"\r\nGNG11"+"\r\nFAM13A"+"\r\nHERC2P3"+"\r\nKLHL29"+"\r\nJAM2"+"\r\nCYP4F12"+"\r\nTPTEP1"+"\r\nF10"+"\r\nSCN4B"+"\r\nFGF7"+"\r\nNTF4"+"\r\nACSM5"+"\r\nATF3"+"\r\nFGFBP2"+"\r\nCLDN8"+"\r\nBOC"+"\r\nNOTCH4"+"\r\nMAFF"+"\r\nCXorf36"+"\r\nTACC1"+"\r\nAP000892.6"+"\r\nLAMA2"+"\r\nRSPO3"+"\r\nPLAGL1"+"\r\nPLEKHH2"+"\r\nTPO"+"\r\nNEAT1"+"\r\nHAS3"+"\r\nROBO4"+"\r\nADAMTS10"+"\r\nCTB-79E8.3"+"\r\nEPAS1"+"\r\nFBLN5"+"\r\nEGFLAM"+"\r\nCAPN3"+"\r\nTMTC1"+"\r\nSYNE3"+"\r\nHOXA4"+"\r\nPGM5-AS1"+"\r\nRRN3P1"+"\r\nDPY19L2"+"\r\nPLIN2"+"\r\nAMT"+"\r\nGHR"+"\r\nAC132217.4"+"\r\nBCL6"+"\r\nSCGB3A1"+"\r\nADHFE1"+"\r\nSTARD9"+"\r\nFAXDC2"+"\r\nMIA"+"\r\nTGFBR2"+"\r\nMYZAP"+"\r\nARHGAP40"+"\r\nCADM3"+"\r\nUSHBP1"+"\r\nFAM89A"+"\r\nBBOX1"+"\r\nSOX9-AS1"+"\r\nRP11-736K20.4"+"\r\nVWF"+"\r\nRP11-286H15.1"+"\r\nGSN"+"\r\nWISP2"+"\r\nHSPB2"+"\r\nLENG8"+"\r\nAQP1"+"\r\nLDB2"+"\r\nDAAM2"+"\r\nANPEP"+"\r\nCEBPD"+"\r\nSNCG"+"\r\nHOXA5"+"\r\nTDRD10"+"\r\nWDR86"+"\r\nPKD1L2"+"\r\nGSTM2"+"\r\nHEPN1"+"\r\nAL035610.1"+"\r\nTMOD1"+"\r\nDEFB1"+"\r\nTNS1"+"\r\nKLK8"+"\r\nIL6"+"\r\nARHGEF15"+"\r\nFHL5"+"\r\nRP11-61I13.3"+"\r\nDMD"+"\r\nHERC2P2"+"\r\nPRCD"+"\r\nLCN6"+"\r\nEBF3"+"\r\nHLF"+"\r\nRP1-193H18.3"+"\r\nSYNPO2"+"\r\nZFP36"+"\r\nRASGRP2"+"\r\nGOLGA8B"+"\r\nTXNIP"+"\r\nMT1X"+"\r\nLY6G5B"+"\r\nDGAT2"+"\r\nCDKN1C"+"\r\nAK5"+"\r\nLVRN"+"\r\nSPRY1"+"\r\nRP11-203J24.9"+"\r\nFGF2"+"\r\nANKRD29"+"\r\nADRB2"+"\r\nADAMTS5"+"\r\nMAP1LC3C"+"\r\nMAGI2-AS3"+"\r\nTMEM88"+"\r\nSCN4A"+"\r\nKLF4"+"\r\nFAM65C"+"\r\nMYOC"+"\r\nC1QTNF1"+"\r\nTFPI"+"\r\nLEPR"+"\r\nACADL"+"\r\nHSPB2-C11orf52"+"\r\nRGMA"+"\r\nGLYAT"+"\r\nSHE"+"\r\nALDH1A1"+"\r\nCHL1"+"\r\nRIC3"+"\r\nFP325317.1"+"\r\nEGFL7"+"\r\nGDF10"+"\r\nWIF1"+"\r\nITM2A"+"\r\nAASS"+"\r\nLHFP"+"\r\nRRAD"+"\r\nGYG2"+"\r\nAQP7P1"+"\r\nNGFR"+"\r\nEBF1"+"\r\nMRGPRF"+"\r\nMAN2C1"+"\r\nAMY2B"+"\r\nNOVA1"+"\r\nCCL28"+"\r\nHOTAIRM1"+"\r\nROBO3"+"\r\nAPOLD1"+"\r\nAKR1C3"+"\r\nBHMT2"+"\r\nMATN2"+"\r\nPGM5"+"\r\nFGF10"+"\r\nDUSP1"+"\r\nSLC2A4"+"\r\nPAMR1"+"\r\nCCDC69"+"\r\nGSTM5"+"\r\nWNT11"+"\r\nTNS2"+"\r\nCALB2"+"\r\nPI15"+"\r\nMME"+"\r\nFAM189A2"+"\r\nIRX1"+"\r\nCAV2"+"\r\nF3"+"\r\nHRCT1"+"\r\nKIT"+"\r\nPALMD"+"\r\nC11orf96"+"\r\nNDRG2"+"\r\nCLDN11"+"\r\nGOLGA6L5P"+"\r\nLIMS2"+"\r\nNRN1"+"\r\nSORBS1"+"\r\nPRELP"+"\r\nEGFR"+"\r\nSTEAP4"+"\r\nEDNRB"+"\r\nNTRK2"+"\r\nMYBPC1"+"\r\nPTH1R"+"\r\nLIFR"+"\r\nAKAP12"+"\r\nMAMDC2"+"\r\nS1PR1"+"\r\nIGF1"+"\r\nPID1"+"\r\nSHANK3"+"\r\nTAT"+"\r\nPTX3"+"\r\nAGAP11"+"\r\nMYO15B"+"\r\nIGSF10"+"\r\nPKDCC"+"\r\nAC002398.12"+"\r\nTRHDE-AS1"+"\r\nLCAT"+"\r\nIL33"+"\r\nNR4A1"+"\r\nRP11-175K6.1"+"\r\nID4"+"\r\nMFAP4"+"\r\nTSPAN7"+"\r\nSOX17"+"\r\nPEAR1"+"\r\nCX3CL1"+"\r\nTINAGL1"+"\r\nSYN2"+"\r\nPQLC2L"+"\r\nRBP7"+"\r\nMEDAG"+"\r\nNNAT"+"\r\nTNNT3"+"\r\nKLK5"+"\r\nMT1A"+"\r\nSEMA3G"+"\r\nVIT"+"\r\nCES1"+"\r\nGRASP"+"\r\nCORO6"+"\r\nMEOX2"+"\r\nKANK3"+"\r\nENPP2"+"\r\nSLC7A10"+"\r\nMIR143HG"+"\r\nTF"+"\r\nSVEP1"+"\r\nADAMTS1"+"\r\nOGN"+"\r\nLRRN4CL"+"\r\nCCL21"+"\r\nADAMTSL4"+"\r\nAGTR1"+"\r\nGOLGA8A"+"\r\nKRT15"+"\r\nMEOX1"+"\r\nCAV1"+"\r\nCOL17A1"+"\r\nSPRY2"+"\r\nTWIST2"+"\r\nSLCO4A1"+"\r\nRASD1"+"\r\nLMOD1"+"\r\nTGFBR3"+"\r\nCNN1"+"\r\nAOX1"+"\r\nDES"+"\r\nMUSTN1"+"\r\nPIGR"+"\r\nKLF15"+"\r\nTHRSP"+"\r\nMMRN1"+"\r\nFAM150B"+"\r\nOSR1"+"\r\nANGPTL1"+"\r\nTMEM132C"+"\r\nAC073850.6"+"\r\nGPAM"+"\r\nKRT17"+"\r\nGPR146"+"\r\nSRPX"+"\r\nCDO1"+"\r\nABCA6"+"\r\nSLC25A27"+"\r\nOXTR"+"\r\nCNTNAP3B"+"\r\nMEG3"+"\r\nGABRP"+"\r\nRP1-28O10.1"+"\r\nMUCL1"+"\r\nPLAC9"+"\r\nGPC3"+"\r\nC14orf180"+"\r\nTNMD"+"\r\nRERGL"+"\r\nPPARG"+"\r\nC7"+"\r\nPI16"+"\r\nITIH5"+"\r\nALDH1L1"+"\r\nAC005152.3"+"\r\nDPT"+"\r\nRAPGEF3"+"\r\nMAOA"+"\r\nCXCL2"+"\r\nABCA10"+"\r\nAPOD"+"\r\nTMEM100"+"\r\nANGPTL4"+"\r\nMT1M"+"\r\nC10orf10"+"\r\nLGI4"+"\r\nATP1A2"+"\r\nAOC3"+"\r\nADH1C"+"\r\nSYNM"+"\r\nMYH11"+"\r\nNPR1"+"\r\nADCY4"+"\r\nADM"+"\r\nDIO3OS"+"\r\nCRYAB"+"\r\nSOD3"+"\r\nRDH5"+"\r\nCLEC3B"+"\r\nSFRP1"+"\r\nSAA2"+"\r\nPCK1"+"\r\nPPP1R14A"+"\r\nIGFBP6"+"\r\nACTA2-AS1"+"\r\nCNTFR"+"\r\nACTG2"+"\r\nABCA9"+"\r\nKRT14"+"\r\nKRT5"+"\r\nGALNT15"+"\r\nHBA1"+"\r\nSOX10"+"\r\nPLA2G2A"+"\r\nLGALS12"+"\r\nFMO2"+"\r\nPER1"+"\r\nACKR1"+"\r\nMLXIPL"+"\r\nHIF3A"+"\r\nHBB"+"\r\nFIGF"+"\r\nATOH8"+"\r\nFAM107A"+"\r\nRP11-394O4.5"+"\r\nPDE2A"+"\r\nGPIHBP1"+"\r\nZBTB16"+"\r\nS100B"+"\r\nHBA2"+"\r\nABCA8"+"\r\nACACB"+"\r\nSDPR"+"\r\nPPP1R1A"+"\r\nSLC19A3"+"\r\nCCL14"+"\r\nC2orf40"+"\r\nPCOLCE2"+"\r\nADAM33"+"\r\nSCARA5"+"\r\nTNXB"+"\r\nGABRE"+"\r\nAKR1C1"+"\r\nCHRDL1"+"\r\nMRAP"+"\r\nSTAC2"+"\r\nHSPB7"+"\r\nTMSB4XP6"+"\r\nLYVE1"+"\r\nFHL1"+"\r\nKCNIP2"+"\r\nITGA7"+"\r\nSAA1"+"\r\nG0S2"+"\r\nPDK4"+"\r\nLPL"+"\r\nFXYD1"+"\r\nAKR1C2"+"\r\nLIPE"+"\r\nCD36"+"\r\nCLDN5"+"\r\nTIMP4"+"\r\nTUSC5"+"\r\nCA4"+"\r\nCIDEA"+"\r\nGPX3"+"\r\nLEP"+"\r\nCFD"+"\r\nBTNL9"+"\r\nHSPB6"+"\r\nAQP7"+"\r\nCD300LG"+"\r\nPLIN4"+"\r\nRBP4"+"\r\nADIPOQ"+"\r\nGPD1"+"\r\nPLIN1"+"\r\nCIDEC"+"\r\nFABP4"+"\r\nADH1B");
+    }
+</script>
+<script th:src="@{/js/analysis.js}"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#all").click(function () {
+            if (this.checked) {
+                $("#list :checkbox").prop("checked", true);
+            } else {
+                $("#list :checkbox").prop("checked", false);
+            }
+        });
+    });
+    celllineMults();
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var radios = $(".cb-radio");
+        $("#filestyle").click(function () {
+            radios.eq(1).prop("checked", true);
+            radios.eq(0).prop("checked", false);
+        });
+        $("#example").click(function () {
+            radios.eq(1).prop("checked", false);
+            radios.eq(0).prop("checked", true);
+        });
+        $("#file").click(function () {
+            radios.eq(1).prop("checked", true);
+            radios.eq(0).prop("checked", false);
+        });
+        $("#inlineCheckbox2").click(function () {
+            if ($('input:checkbox[name="fimo"]:checked').val()) {
+                $("fieldset").removeAttr("disabled");
+                $("#noneselect").remove();
+            } else {
+                $("fieldset").attr("disabled", "disabled");
+                $("#pvalueselect").append('<option id="noneselect" selected="selected">none</option>');
+            }
+        });
+    });
+</script>
+</html>
+
+

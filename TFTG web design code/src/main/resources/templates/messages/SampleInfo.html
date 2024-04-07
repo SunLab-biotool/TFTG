@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>-->
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+    <style>
+        .infotab {
+            font-size: 15px;
+            font-weight: bold;
+            height: 48px;
+        }
+
+        .panel-heading {
+            height: 50px;
+            background-color: #317190 !important;
+        }
+
+        h3 {
+            font-size: 30px !important;
+            font-weight: bold !important;
+            color: #fff !important;
+        }
+
+        .genebg {
+            background-color: #5bc0de;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="inc/nav :: nav"></div>
+
+<div class="container-fulid" style="margin-top: 10px;">
+
+    <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" id="section-1">
+                        <span class="glyphicon glyphicon-info-sign"></span> ChIP-seq overview
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-6" style="padding-right: 30px;">
+                        <table class="table table-hover table-striped">
+                            <tbody>
+                            <tr>
+                                <td class="infotab">Sample name:</td>
+                                <td th:text="${sampleinfo.sample_id}"></td>
+                            </tr>
+                            <tr>
+                                <td class="infotab">Data Source:</td>
+                                <td th:text="${sampleinfo.data_sources}"></td>
+                            </tr>
+                            <tr>
+                                <td class="infotab">TF name:</td>
+                                <td th:text="${sampleinfo.tf_name}"></td>
+                            </tr>
+                            <tr>
+                                <td class="infotab">Sample type:</td>
+                                <td th:text="${sampleinfo.sample_type}"></td>
+                            </tr>
+                            <tr>
+                                <td class="infotab">Biosample name:</td>
+                                <td th:text="${sampleinfo.biosample_name_specific}"></td>
+                            </tr>
+                            <tr>
+                                <td class="infotab">GEO/ENCODE/SRA ID:</td>
+                                <td th:text="${sampleinfo.sample_name}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6" style="margin-left: -15px;margin-right: -15px;">
+                        <div id="samplechr" style="width: 100%;height: 350px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span class="glyphicon glyphicon-indent-left"></span> Detailed information of <span
+                            th:text="${sampleinfo.sample_id}"></span> targets
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-12" style="text-align: center">
+                        <button type="button" class="btn btn-info active" onclick="browsermethod('SE',this)">C_SE</button>
+                        <button type="button" class="btn btn-info" onclick="browsermethod('TE',this)">C_TE</button>
+                        <button type="button" class="btn btn-info" onclick="browsermethod('ATAC',this)">C_ATAC</button>
+                        <button type="button" class="btn btn-info" onclick="browsermethod('Silencer',this)">C_Silencer
+                        </button>
+                        <button type="button" class="btn btn-info" onclick="browsermethod('Promoter',this)">C_Promoter
+                        </button>
+                        <button type="button" class="btn btn-info" onclick="browsermethod('BETA',this)">C_BETA</button>
+                        <button type="button" class="btn btn-info" onclick="browsermethod('Genemapper',this)">C_Genemapper
+                        </button>
+                    </div>
+                    <div id="browsepage">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span class="glyphicon glyphicon-picture"></span> Dynamic peak annotation visulization
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-6" style="text-align: center;">
+                        <div id="sampleRegion" style="width: 600px;height: 350px;"></div>
+                    </div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <div id="distance" style="width: 600px;height: 350px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span class="glyphicon glyphicon-picture"></span> Static peak annotation visulization
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-3" style="text-align: center;">
+                        <label>Plot A</label><br>
+<!--                        <img src="" id="img1" class="img-thumbnail" style="width:300px;">-->
+                        <iframe src="" id="img1" class="img-thumbnail" style="width: 400px;height: 380px;"></iframe>
+                    </div>
+                    <div class="col-md-3" style="text-align: center;">
+                        <label>Plot B</label><br>
+<!--                        <img src="" id="img2" class="img-thumbnail" style="width:300px;">-->
+                        <iframe src="" id="img2" class="img-thumbnail" style="width: 400px;height: 380px;"></iframe>
+                    </div>
+                    <div class="col-md-6">
+
+                        <table class="table table-hover " style="margin-top:70px">
+                            <tbody>
+                            <tr>
+                                <td><strong>Plot A:</strong> a heatmap of peaks binding to TSS region.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Note A:</strong> the profile of ATAC peaks binding to TSS region (+/- 3kb).
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-hover " style="margin-top:15px">
+                            <tbody>
+                            <tr>
+                                <td><strong>Plot B:</strong> an upset of genomic region type.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Note B:</strong> the proportion of annotating genomic region (Promoter,
+                                    5'UTR, 3'UTR, Exon, Intron, Downstream and Intergenic).
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+</body>
+<script th:src="@{/js/sample.js}"></script>
+<script th:inline="javascript">
+    var sampleid = [[${sampleid}]];
+    setsample(sampleid)
+
+    $("#img1").attr({
+        "src": "img/sample/upset-heatmap/" + sampleid + "_tagHeatmap.pdf"
+    });
+    $("#img2").attr({
+        "src": "img/sample/upset-heatmap/" + sampleid + "_upsetplot.pdf"
+    });
+    samplechr()
+    distance()
+    sampleRegion()
+    browserse(sampleid)
+</script>
+</html>

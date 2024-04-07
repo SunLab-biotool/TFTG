@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>TFTG</title>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>-->
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body data-spy="scroll" data-target="#myScrollspy">
+<div th:replace="inc/nav :: nav"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 id="section-1">TF information</h2>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td style="width: 50%">TF</td>
+                    <td>txt <a href="file/home/download/download_TF_information.txt"
+                               download="download_TF_information.txt"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                </tbody>
+            </table>
+            <hr>
+            <h2 id="section-2">TF ChIP-seq information</h2>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td style="width: 50%">ChIP-seq sample information</td>
+                    <td>txt <a href="file/home/download/down_TF_chipseq_information.txt"
+                               download="down_TF_chipseq_information.txt"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <hr>
+            <h2 id="section-3">TF Knock down_out information</h2>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td style="width: 50%">Knock down_out sample information</td>
+                    <td>txt <a href="file/home/download/download_TF_knock_down_out_information.txt"
+                               download="download_TF_knock_down_out_information.txt"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h2 id="section-4">TF elements of all samples</h2>
+            <ul id="myTab" class="nav nav-tabs" style="width: 100%;margin-bottom: 15px;">
+                <li class="active">
+                    <a href="#home" data-toggle="tab">
+                        ChIP-seq table
+                    </a>
+                </li>
+                <li><a href="#ios" data-toggle="tab">RNA-seq table</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="home">
+                    <table id="datatab1" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Sample_id</th>
+                            <th>Data_Sources</th>
+                            <th>Sample_type</th>
+                            <th>Biosample_name</th>
+                            <th>Download</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="ios">
+                    <table id="datatab2" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Dataset_id</th>
+                            <th>Source</th>
+                            <th>Biosample_name</th>
+                            <th>Knock_method</th>
+                            <th>Download</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr>
+            <h2 id="section-5">TF downstream target gene of different methods</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width: 50%">Method</th>
+                    <th>Download</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>C_SE</td>
+                    <td>zip <a href="file/home/download/TF_SE.zip" download="TF_SE.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>C_TE</td>
+                    <td>zip <a href="file/home/download/TF_TE.zip" download="TF_TE.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>C_ATAC</td>
+                    <td>zip <a href="file/home/download/TF_ATAC.zip" download="TF_ATAC.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>C_Promoter</td>
+                    <td>zip <a href="file/home/download/TF_Promoter.zip" download="TF_Promoter.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>C_BETA</td>
+                    <td>zip <a href="file/home/download/TF_BETA.zip" download="TF_BETA.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>C_Genemapper</td>
+                    <td>zip <a href="file/home/download/Genemapper.zip" download="Genemapper.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>C_Silencer</td>
+                    <td>zip <a href="file/home/download/Silencer.zip" download="Silencer.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>Curate</td>
+                    <td>zip <a href="file/home/download/Curate.zip" download="Curate.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>Knock</td>
+                    <td>zip <a href="file/home/download/Knock.zip" download="Knock.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>motif_SE</td>
+                    <td>zip <a href="file/home/download/motif_SE_TFfen.zip" download="motif_SE_TFfen.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>motif_TE</td>
+                    <td>zip <a href="file/home/download/motif_TE_TFfen.zip" download="motif_TE_TFfen.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>motif_ATAC</td>
+                    <td>zip <a href="file/home/download/motif_ATAC_TFfen.zip" download="motif_ATAC_TFfen.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>motif_Promoter</td>
+                    <td>zip <a href="file/home/download/motif_Promoter_TFfen.zip"
+                               download="motif_Promomter_TFfen.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+                <tr>
+                    <td>motif_Silencer</td>
+                    <td>zip <a href="file/home/download/motif_Silencer_TFfen.zip"
+                               download="motif_Silencer_TFfen.zip"><span
+                            class="glyphicon glyphicon-download-alt"></span></a></td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <hr>
+
+        </div>
+    </div>
+</div>
+<div th:replace="inc/footer :: footer"></div>
+</body>
+<script>
+    $('#datatab1').DataTable({
+        ajax: {
+            url: "datatab1",
+            type: "GET"
+        },
+        // bStateSave: false,
+        oLanguage: {
+            sLoadingRecords: '<img src="img/loading.gif" style="width: 350px;">'
+        },
+        // serverSide: true,
+        searching: true,
+        paging: true,
+        ordering: true,
+        scrollX: true,
+        // dom: 'Bfrtip',
+        destroy: true,
+        columns: [
+            {
+                "data": "id",
+                "render": function (data, type, row, meta) {
+                    return "<a href='sampleid?sampleid=" + row.id + "'>" + row.id + "</a>";
+                }
+            },
+            {"data": "source"},
+            {"data": "type"},
+            {"data": "bioname"},
+            {
+                "data": "id",
+                "render": function (data, type, row, meta) {
+                    return "<a href='file/home/download/TF ChIPseq elements of all samples/data/download_" + row.id + ".bed' download='file.bed'>" + "<span class='glyphicon glyphicon-download-alt'></span></a>";
+                }
+            }
+        ]
+    });
+
+    $('#datatab2').DataTable({
+        ajax: {
+            url: "datatab2",
+            type: "GET"
+        },
+        // bStateSave: false,
+        oLanguage: {
+            sLoadingRecords: '<img src="img/loading.gif" style="width: 350px;">'
+        },
+        // serverSide: true,
+        searching: true,
+        paging: true,
+        ordering: true,
+        scrollX: true,
+        // dom: 'Bfrtip',
+        destroy: true,
+        columns: [
+            {"data": "id"},
+            {"data": "source"},
+            {"data": "bioname"},
+            {"data": "method"},
+            {
+                "data": "id",
+                "render": function (data, type, row, meta) {
+                    return "<a href='file/home/download/TF knock down_out elements of all samples/data/download_" + row.id + ".txt' download='file.txt'>" + "<span class='glyphicon glyphicon-download-alt'></span></a>";
+                }
+            }
+        ]
+    });
+    datatablesShow()
+
+    function datatablesShow() {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            // 当切换tab时，强制重新计算列宽
+            $.fn.dataTable.tables({
+                visible: true,
+                api: true
+            }).columns.adjust();
+        });
+        /* datatables配置结束 */
+    }
+</script>
+</html>

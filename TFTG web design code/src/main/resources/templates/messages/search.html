@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-multiselect.css}"/>
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>-->
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap-multiselect.js}"></script>
+    <style>
+        .panel-heading1 {
+            height: 50px;
+            background-color: #317190 !important;
+        }
+
+        .panel-heading2 {
+            height: 50px;
+            background-color: #fe7725 !important;
+        }
+
+        h4 {
+            font-size: 30px !important;
+            font-weight: bold !important;
+            color: #fff !important;
+        }
+
+        .rd {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="inc/nav :: nav"></div>
+
+<div class="container-fulid" style="margin-top: 10px;">
+
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1">
+            <h1 style="font-size: 40px;font-weight: 600;"><span class="	glyphicon glyphicon-search"></span> Search
+            </h1>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading2" id="coll1">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseOne">
+                                <span class="glyphicon glyphicon-th-list" style="color: #ffffff;"></span> Search by TF
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body"
+                             style="padding-top: 30px;padding-bottom: 30px;border: 2px solid #fe7725;">
+                            <div class="col-md-6">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <label>Family:</label>
+                                        <select class="form-control" name="family" id="family">
+                                            <option th:each="item:${family}" th:value="${item}"
+                                                    th:text="${item}"></option>
+                                        </select>
+                                    </div>
+                                    <!--<div class="form-group">
+                                        &lt;!&ndash;                                <input type="text" class="form-control" name="symbol" id="tf" placeholder="TF name eg:GATA2">&ndash;&gt;
+                                        <select class="form-control" name="tf" id="tf">
+                                        </select>
+                                    </div>-->
+                                    <div class="form-group">
+                                        <label>TF name:</label><br>
+                                        <select id="celllineMults" name="cell"></select>
+                                    </div>
+
+                                    <button type="button" onclick="SearchByTf()" class="btn btn-success">Submit</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <h style="font-size: 25px;margin-top: 2%; color:red">Option explanation:</h>
+                                <p style="font-size: 18px;margin-top: 2%; ">
+                                    <span class="rd">1) Family:</span> Select one TF family.
+                                </p>
+                                <p style="font-size: 18px;margin-top: 2%;"><span class="rd">2) TF name:</span> Only TF
+                                    can be supported.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading1" id="coll2">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseTwo">
+                                <span class="glyphicon glyphicon-th-list" style="color: #ffffff;"></span> Search by
+                                target gene
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body" style="border: 2px solid #fe7725;">
+                            <div class="col-md-6">
+                                <form role="form" action="searchByGene">
+                                    <div class="form-group">
+                                        <label>Method:</label>
+                                        <select class="form-control" name="method" id="method" onchange="weights()">
+                                            <option value="SE">C_SE</option>
+                                            <option value="TE">C_TE</option>
+                                            <option value="ATAC">C_ATAC</option>
+                                            <option value="Silencer">C_Silencer</option>
+                                            <option value="Promoter">C_Promoter</option>
+                                            <option value="BETA">C_BETA</option>
+                                            <option value="Genemapper">C_Genemapper</option>
+                                            <option value="Knock">Perturbation</option>
+                                            <option value="Curate">Curate</option>
+                                            <option value="M_SE">M_SE</option>
+                                            <option value="M_TE">M_TE</option>
+                                            <option value="M_ATAC">M_ATAC</option>
+                                            <option value="M_Silencer">M_Silencer</option>
+                                            <option value="M_Promoter">M_Promoter</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Weight:</label>
+                                        <select class="form-control" name="weight" id="weight">
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Gene symbol:</label>
+                                        <input type="text" class="form-control" name="gene" id="gene"
+                                               placeholder="Target  eg:ABCA1">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="example2()">Example</button>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <h style="font-size: 25px;margin-top: 2%; color:red">Option explanation:</h>
+                                <p style="font-size: 18px;margin-top: 2%; ">
+                                    <span class="rd">1) Method:</span> Select one of fourteen TF-target gene methods.
+                                </p>
+                                <p style="font-size: 18px;margin-top: 2%;"><span class="rd">2) Weight:</span> Select
+                                    different weights which the weight indicates how many methods confirmed the
+                                    regulatory relationship between TFs and their target genes.</p>
+                                <p style="font-size: 18px;margin-top: 2%; ">
+                                    <span class="rd">3) Gene symbol:</span> Only gene symbol can be supported.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" style="margin-bottom: 30px;">
+                    <div class="panel-heading panel-heading1" id="coll3">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseFour">
+                                <span class="glyphicon glyphicon-th-list" style="color: #ffffff;"></span> Search by
+                                genomic region
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse">
+                        <div class="panel-body" style="border: 2px solid #fe7725;">
+                            <div class="col-md-6">
+                                <form role="form" action="tfbedtools">
+                                    <div class="form-group">
+                                        <label>Method:</label>
+                                        <select class="form-control" id="chipmethod" name="chipmethod">
+                                            <option value="SE">C_SE</option>
+                                            <option value="TE">C_TE</option>
+                                            <option value="ATAC">C_ATAC</option>
+                                            <option value="Silencer">C_Silencer</option>
+                                            <option value="Promoter">C_Promoter</option>
+                                            <option value="BETA">C_BETA</option>
+                                            <option value="Genemapper">C_Genemapper</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Chromosome:</label>
+                                        <select class="form-control" id="chromosome" name="chromosome">
+                                            <option>chr1</option>
+                                            <option>chr2</option>
+                                            <option>chr3</option>
+                                            <option>chr4</option>
+                                            <option>chr5</option>
+                                            <option>chr6</option>
+                                            <option>chr7</option>
+                                            <option>chr8</option>
+                                            <option>chr9</option>
+                                            <option>chr10</option>
+                                            <option>chr11</option>
+                                            <option>chr12</option>
+                                            <option>chr13</option>
+                                            <option>chr14</option>
+                                            <option>chr15</option>
+                                            <option>chr16</option>
+                                            <option>chr17</option>
+                                            <option>chr18</option>
+                                            <option>chr19</option>
+                                            <option>chr20</option>
+                                            <option>chr21</option>
+                                            <option>chr22</option>
+                                            <option>chrX</option>
+                                            <option>chrY</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Strat position:</label>
+                                        <input type="text" class="form-control" id="start" name="start"
+                                               placeholder="Starting position  eg:91324">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>End position:</label>
+                                        <input type="text" class="form-control" id="end" name="end"
+                                               placeholder="End position  eg:112566">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="example3()">Example</button>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <br><br><br>
+                                <h style="font-size: 25px;margin-top: 30px; color:red">Option explanation:</h>
+                                <p style="font-size: 18px;margin-top: 2%; ">
+                                    <span class="rd">1) Method:</span> Select one of fourteen TF-target gene methods.
+                                </p>
+                                <p style="font-size: 18px;margin-top: 2%; ">
+                                    <span class="rd">2) Chromosome:</span> Chromosome.</p>
+                                <p style="font-size: 18px;margin-top: 2%; ">
+                                    <span class="rd">3) Start position:</span> TFs binding to the genomic regions is
+                                    at the start of the chromosome.</p>
+                                <p style="font-size: 18px;margin-top: 2%; ">
+                                    <span class="rd">4) End position:</span> TFs binding to the genomic regions is at
+                                    the end of the chromosome.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+</body>
+<script th:src="@{/js/search.js}"></script>
+
+
+<script th:inline="javascript">
+    var family = $("#family").val();
+    // gettf(family);
+    celllineMults(family)
+
+    $("#family").change(function () {
+        var family = $("#family").val();
+        // gettf(family);
+        celllineMults(family)
+    });
+    weights()
+
+    function weights() {
+        var method = $("#method").val();
+        $.ajax({
+            url: "weightbymethod",
+            type: "get",
+            data: {"method": method},
+            async: false,
+            success: function (res) {
+                for (var i in res.data) {
+                    $("#weight").append("<option value='" + res.data[i] + "'>>" + res.data[i] + "</option>");
+                }
+            },
+            dataType: "json"
+        });
+    }
+
+    function example1() {
+        $("#tf").val("GATA2");
+    }
+
+    function example2() {
+        $("#gene").val("ABCA1");
+    }
+
+    function example3() {
+        $("#start").val("91324");
+        $("#end").val("112566");
+    }
+
+    function gettf(family) {
+        $.ajax({
+            url: "tfByFamily1",
+            type: "get",
+            data: {"family": family},
+            async: false,
+            success: function (res) {
+                $("#tf").empty();
+                for (var i in res.data) {
+                    $("#tf").append("<option>" + res.data[i] + "</option>");
+                }
+            },
+            dataType: "json"
+        });
+    }
+
+    function celllineMults(family) {
+        var data;
+        $.ajax({
+            url: "tfMultSelectByFamily1",
+            data: {"family": family},
+            async: false,
+            success: function (_data) {
+                data = _data.data;
+            },
+            dataType: "json"
+        });
+        $('#celllineMults').multiselect({
+            enableFiltering: true,
+            includeSelectAllOption: false,
+            enableCaseInsensitiveFiltering: true,
+            buttonWidth: '300px',
+            maxHeight: 250,
+            enableCollapsibleOptGroups: true,
+            dropUp: false
+        });
+        $('#celllineMults').multiselect('dataprovider', data);
+    }
+
+    $(function () {
+        $('#collapseOne').on('show.bs.collapse', function () {
+            $("#coll1").removeClass("panel-heading1");
+            $("#coll1").addClass("panel-heading2");
+        })
+        $('#collapseOne').on('hide.bs.collapse', function () {
+            $("#coll1").removeClass("panel-heading2");
+            $("#coll1").addClass("panel-heading1");
+        })
+        $('#collapseTwo').on('show.bs.collapse', function () {
+            $("#coll2").removeClass("panel-heading1");
+            $("#coll2").addClass("panel-heading2");
+        })
+        $('#collapseTwo').on('hide.bs.collapse', function () {
+            $("#coll2").removeClass("panel-heading2");
+            $("#coll2").addClass("panel-heading1");
+        })
+        $('#collapseFour').on('show.bs.collapse', function () {
+            $("#coll3").removeClass("panel-heading1");
+            $("#coll3").addClass("panel-heading2");
+        })
+        $('#collapseFour').on('hide.bs.collapse', function () {
+            $("#coll3").removeClass("panel-heading2");
+            $("#coll3").addClass("panel-heading1");
+        })
+    });
+</script>
+</html>

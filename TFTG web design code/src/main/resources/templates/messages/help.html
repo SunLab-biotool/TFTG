@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>-->
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+    <style>
+        /* Custom Styles */
+        ul.nav-tabs {
+            width: 287px;
+            margin-top: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+        }
+        .rd {
+            color: orange;
+        }
+        input:checked + div{
+            display: block;
+        }
+        input:checked + ul{
+            display: block;
+        }
+        input {
+            display: none;
+        }
+        li {
+            list-style: none;
+        }
+
+        ul.nav-tabs li {
+            margin: 0;
+            border-top: 1px solid #ddd;
+        }
+
+        ul.nav-tabs li:first-child {
+            border-top: none;
+        }
+
+        ul.nav-tabs li a {
+            margin: 0;
+            padding: 8px 16px;
+            border-radius: 0;
+        }
+
+        ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover {
+            color: #fff;
+            background: #0088cc;
+            border: 1px solid #0088cc;
+        }
+
+        ul.nav-tabs li:first-child a {
+            border-radius: 4px 4px 0 0;
+        }
+
+        ul.nav-tabs li:last-child a {
+            border-radius: 0 0 4px 4px;
+        }
+
+        ul.nav-tabs.affix {
+            top: 30px; /* Set the top position of pinned element */
+        }
+
+        h3 {
+            background-color: #317190;
+            padding: 15px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        h4 {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        h2 {
+            color: #0f368b;
+        }
+
+        p {
+            font-size: 20px;
+        !important;
+        }
+    </style>
+</head>
+<body data-spy="scroll" data-target="#myScrollspy">
+<div th:replace="inc/nav :: nav"></div>
+<div class="container-fulid">
+
+    <div class="row">
+        <div class="col-md-2">
+            <div class="panel-group" role="tablist">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a href="#Disease">Help</a></h4>
+                    </div>
+                    <div class="list-group" id="left_classI_1">
+                        <a class="list-group-item" href="#1.1"><span class="badge"></span>Introduction</a>
+                        <a class="list-group-item" href="#1.2"><span class="badge"></span>How to Use the TFTG?</a>
+                        <a class="list-group-item" href="#Docker_image"><span class="badge"></span>The methods for the identification of TF-target genes</a>
+                    </div>
+
+                </div>
+                <br>
+                <div class="panel-group" role="tablist">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title"><a href="#ChromHMM">Medthods</a></h4>
+                        </div>
+                        <div class="list-group">
+                            <a class="list-group-item" href="#chi">
+                                <label for="menu"><span class="badge"></span>ChIP-seq_class</label></a>
+                            <input type="checkbox" id="menu">
+                            <ul class="as">
+                                <li style="margin-left: 3px;border: 1px solid #eef0f6"><a class="list-group-item" href="#se">C_SE</a></li>
+                                <li style="margin-left: 3px;border: 1px solid #EEF0F6"><a class="list-group-item" href="#te">C_TE</a></li>
+                                <li style="margin-left: 3px;border: 1px solid #eef0f6"><a class="list-group-item" href="#atac">C_ATAC</a></li>
+                                <li style="margin-left: 3px;border: 1px solid #EEF0F6"><a class="list-group-item" href="#silencer">C_Silencer</a></li>
+                                <li style="margin-left: 3px;border: 1px solid #eef0f6"><a class="list-group-item" href="#promoter">C_Promoter</a></li>
+                                <li style="margin-left: 3px;border: 1px solid #EEF0F6"><a class="list-group-item" href="#beta">C_BETA</a></li>
+                                <li style="margin-left: 3px"><a class="list-group-item" href="#ChromHMM">C_Genemapper</a></li>
+                            </ul>
+                            <a class="list-group-item" href="#ChromHMM">
+                                <label for="menu2"><span class="badge"></span>Perturbation_class</label></a>
+                            <input type="checkbox" id="menu2">
+                            <ul class="as">
+                                <li style="margin-left: 3px"><a class="list-group-item" href="#perturbation">Perturbation</a></li>
+                            </ul>
+                            <a class="list-group-item" href="#ChromHMM">
+                                <label for="menu3"><span class="badge"></span>Curate_class</label></a>
+                            <input type="checkbox" id="menu3">
+                            <ul class="as">
+                                <li style="margin-left: 3px"><a class="list-group-item" href="#curate">Curate</a></li>
+                            </ul>
+                            <a class="list-group-item" href="#motif">
+                                <label for="menu4"><span class="badge"></span>Motif_class</label></a>
+                            <input type="checkbox" id="menu4">
+                            <ul style="border: 1px" class="as">
+                                <li style="margin-left: 3px;border: 1px solid #EEF0F6"><a class="list-group-item" href="#mse">M_SE</a></li>
+                                <li style="margin-left: 3px;border: 1px solid #EEF0F6"><a class="list-group-item" href="#mte">M_TE</a></li>
+                                <li style="margin-left: 3px;border: 1px solid #EEF0F6"><a class="list-group-item" href="#matac">M_ATAC</a></li>
+                                <li style="margin-left: 3px;border: 1px solid #EEF0F6"><a class="list-group-item" href="#msil">M_Silencer</a></li>
+                                <li style="margin-left: 3px"><a class="list-group-item" href="#mprom">M_Promoter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <p id="1.1">
+            <h3 style="text-align: left">INTRODUCTION</h3></p>
+            <div style="text-align: center;border-style: dotted;padding: 15px;border-top: 0px">
+                <div style="text-align: left">
+                    <p>Transcription factors (TFs) play crucial roles in transcriptional regulation processes, and the
+                        relationships between TFs and their target genes are essential in the control of cell-specific gene
+                        expression and the occurrence of diseases.
+                    </p>
+                </div>
+                <img src="img/di.png" style="width: 880px;"></div>
+            <p id="1.2">
+            <h3 style="text-align: left">How to Use the TFTG?</h3></p>
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading1">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#collapse3" style="font-size: 20px;text-align: center">
+                            <span style="text-align: center;margin-left: 728px"></span> Browse
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse3" class="panel-collapse collapse">
+                    <p>The “Browse” page is organized as an interactive table that allows users to quickly search for TFs and customize filters according to “TF Family”, “TF Class” and “TF Name”. Users can click the “CSV” to download the basic information of TFs. To view details of a TF, users click on "TF".
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/browser-pic.png" style="width: 100%;">
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading1">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#collapse4" style="font-size: 20px;text-align: center;">
+                            <span style="text-align: center;margin-left: 730px"></span> Search
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse4" class="panel-collapse collapse">
+                    <p>TFTG provides multi-type query modes to facilitate the users to query TF-target genes flexibly.The users can determine the scope of TF-target genes through "Search by TF", "Search by target gene" and "Search by genomic region" .
+                    </p>
+                    <br>
+
+                    <p>
+                        In "Search by TF"，the users can search TF-target genes by inputting the TF name. After submitting,the users can obtain the detailed information of on the input TF, including TF overview, TF target gene network, table of TF-target genes, detailed regulatory information ofTF-targets,TF expression, disease information and annotation of TF.
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/search1.png" style="width: 100%;">
+                    </div>
+                    <p>
+                        In the"Search by target gene"mode, the users can select one of 14 methods, set a weight threshold and input a gene name of interest to search for TFs that regulate this gene. The weights are calculated by counting the number of methods that determine the regulatory relationship ofTFs to target genes. Then,TFTG returns the detailed information of these TFs in the result table.
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/search2.png" style="width: 100%;">
+                    </div>
+                    <p>
+                        ln the"Search by genomic region"mode,with the input of a genomic region and selection of a method, TFTG returns the details of all TF-target genes associated with the input region in the result table.
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/search3.png" style="width: 100%;">
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading1">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#collapse5" style="font-size: 20px;text-align: center">
+                            <span style="text-align: center;margin-left: 727px"></span> Analysis
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse5" class="panel-collapse collapse">
+                    <p>TFTG designs four types of analyses for the TF-target network to elucidate the regulatory mechanisms and function of TF including TF gene set enrichment analysis, TF downstream regulatory analysis, Gene upstream regulatory analysis and Pathway enrichment analysis.
+                    </p>
+                    <br>
+                    <h4>TF gene set enrichment analysis. </h4>
+                    <p>
+                        With the input of the gene set of interest, TFTG returns the list of TFs that are significantly enriched based on target genes using the hypergeometric test. TFTG also provides various parameters to facilitate the users to filter the results, including TF-target genes identification method, the P-value/FDR, number of gene and sample of interest.
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/analysis1pic.png" style="width: 100%;">
+                    </div>
+                    <h4>TF downstream regulatory analysis. </h4>
+                    <p>
+                        By inputting TFs of interest and selecting specificity or non-specificity network, TFTG provides the regulatory network visualizations of these TFs and targets. The node properties in this network are also displayed in a table for insight into interactions.
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/analysis2pic.png" style="width: 100%;">
+                    </div>
+                    <h4>Gene upstream regulatory analysis. </h4>
+                    <p>
+                        By inputting genes of interest, the users can visualize the regulatory network formed by these genes and associated TFs.
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/analysis3pic.png" style="width: 100%;">
+                    </div>
+                    <h4>Pathway enrichment analysis. </h4>
+                    <p>
+                        The users can select at least one pathway source and input a gene set of interest, TFTG returns the significantly enriched pathways. The significance P-values were calculated using the hypergeometric test. In the result table, the terminal TFs of the pathway and their target genes are displayed.
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/analysis4pic.png" style="width: 100%;">
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading1" id="coll2">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#collapse6" style="font-size: 20px;text-align: center">
+                            <span style="text-align: center;margin-left: 724px"></span> Download
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse6" class="panel-collapse collapse">
+                    <p>TFTG provides a convenient and flexible download function for TF-related files, including “TF information”, “TF ChIP-seq data information”, “TF perturbation RNA-seq data information”, “TF ChIP-seq or perturbation RNA-seq sample” and “TF downstream target gene of different methods” . Meanwhile, the database provides batch download for all TF-target genes identified by different methods. We support ".bed", ".txt" or ".zip" formats for data download.
+                    </p>
+                    <div style="text-align: center;border-style: dotted;padding: 15px;"><img src="img/download_picture.png" style="width: 100%;">
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="text-align: left">The detailed instructions of the 4 categories and 14 sub-categories methods for identifying TF-target genes in TFTG</h3></p>
+            <div style="text-align: center;border-style: dotted;padding: 15px;border-top: 0px">
+                <div style="text-align: left">
+                    <p id="chip"><span class="rd">ChIP-seq_class:</span> We first collected a large number of TF binding sites (TFBSs) from TF ChIP-seq datasets involving human multiple tissue/cell types from five public sources, including ENCODE, Cistrome, Remap, ChIP-Atlas and GTRD. All ChIP-seq datasets were further deduplicated by manual screening according to the unique GEO/SRA ID to avoid duplication (Supplementary Materials). For the uniformity of genome version, peaks from ChIP-seq were converted to the hg38 genome using the liftOver tool of UCSC (http://genome.ucsc.edu/cgi-bin/hgLiftOver). Finally, we identify TF-targets based on these TFBSs using 7 strategies (sub-categories prefixed with C_), including C_SE, C_TE, C_ATAC, C_Silencer, C_Promoter, C_BETA, and C_Genemapper, as detailed below:</p>
+                    <br>
+                    <p id="se"><span class="rd">C_SE:</span> The letter ‘SE’ in ‘C_SE’ stands for the super-enhancers. The SEs were obtained from SEdb database developed by our group. Briefly, we curated H3K27ac ChIP-seq raw data from Roadmap, ENCODE, NCBI GEO/SRA and Genomics of Gene Regulation Project (GGR) and run the streamlined pipeline Bowtie-MACS14-ROSE to identify SE regions. In addition, we also downloaded SEs from other projects including SEA, ENdb and dbSuper. For each SE region, we used ROSE geneMapper.py to annotate downstream target genes. Then, we identified TF-target genes when the gene-associated SEs were occupied by TFBSs in matched tissues/cell types using BEDTools.</p>
+                    <br>
+                    <p id="te"><span class="rd">C_TE:</span> The letter ‘TE’ in ‘C_TE’ stands for the typical enhancers. We comprehensively curated the resources provided in the existing enhancer databases, including EnhancerAtlas, FAMTOM5, HANCER, EnhancerDB, DENdb, SEdb and ENdb. For each TE region, we used ROSE geneMapper.py to annotate downstream target genes. Then, we identified TF-target genes when the gene-associated enhancers were occupied by TFBSs in matched tissues/cell types using BEDTools.</p>
+                    <br>
+                    <p id="atac"><span class="rd">C_ATAC:</span> The letter ‘ATAC’ in ‘C_ATAC’ stands for the accessible chromatin regions. More than 2,200 publicly available human ATAC-seq samples were manually curated from NCBI GEO/SRA by ATACdb developed by us. Then, we gained accessible chromatin regions by filtering ATAC-seq samples and running Bowtie2-MACS2. For each accessible chromatin region, we used ROSE geneMapper.py to annotate downstream target genes. Finally, we identified TF-target genes when the gene-associated accessible chromatin regions were occupied by TFBSs in matched tissues/cell types using BEDTools.</p>
+                    <br>
+                    <p id="silencer"><span class="rd">C_Silencer:</span> The silencers were collected from SilencerDB. We used ROSE geneMapper.py to annotate downstream target genes for each silencer region. Then, we identified TF-target genes when the gene-associated silencers were occupied by TFBSs in matched tissues/cell types using BEDTools.</p>
+                    <br>
+                    <p id="promoter"><span class="rd">C_Promoter:</span> We defined promoter regions as 2kb upstream and 2kb downstream of the transcription start sites (TSSs) of genes, which were collected from GENCODE. A gene was considered as TF target when the peaks of TF overlapped with the gene promoter region. The overlapping information was calculated using BEDTools.</p>
+                    <br>
+                    <p id="beta"><span class="rd">C_BETA:</span> For each TF ChIP-seq peak, we measured the potential power for the TF-target regulations using the BETA method. The beta-model score was calculated based on the number of peaks within a certain range and the distance between the peak and TSS.</p>
+                    <br>
+                    <p id="genemapper"><span class="rd">C_Genemapper:</span> We used a Python script geneMapper.py from ROSE to annotate downstream target genes for TFs. This script provided the closest, proximal and overlapping genes for TFs according to the genomic distance between TFBSs and genes.</p>
+                    <br>
+                    <p id="perturbation"><span class="rd">Perturbation_class.</span> All TF perturbation RNA-seq data were collected from the KnockTF database developed by our group. We curated these datasets from NCBI GEO and ENCODE using a list of keywords, such as ‘knockout’, ‘knockdown’, ‘siRNA’, ‘shRNA’ and ‘CRISPR’. We further traversed the title, summary and protocol of preliminary screening results to ensure data quality. Then, we mapped Ensembl IDs to gene symbols with regard to each gene expression profile and deleted genes with zero values in all samples. Then the raw expression values of gene expression profiles were processed by Log2 transformation. We further computed fold change (FC) for each gene. For datasets with more than three samples, The R package limma was used to compute the statistical significance of differential expression. We extracted differentially expressed genes under the threshold of FC ≥3/2 or FC ≤2/3 as TF-target genes.</p>
+                    <br>
+                    <p id="curate"><span class="rd">Curate_class.</span> The method ‘Curate’ represents literature-supported TF-target genes which are generally considered the gold standard dataset. We collected literature-supported TF-target pairs from TRRUST and CHEA3. TRRUST first manually collected Medline abstracts. Then, it used a method named sentence-based text_mining to extract text sentences that might be related to transcriptional regulation, which were finally subjected to manual curation to gain TF-target genes. The regulation in CHEA3 was derived from TF ChIP-seq and ChIP-chip experiments mined from the biomedical research literature.</p>
+                    <br>
+                    <p id="motif"><span class="rd">Motif_class.</span> We first obtained > 3,000 DNA binding motifs from the TRANSFAC and MEME suite deriving from the following five sources: JASPAR CORE 2020 vertebrates, Jolma2013, Homeodomain, UniPROBE and Wei2010. Next, we identify TF-targets based on these motifs using 5 strategies (sub-categories prefixed with M_), including M_SE, M_TE, M_ATAC, M_Silencer and M_Promoter, as detailed below:</p>
+                    <br>
+                    <p id="mse"><span class="rd">M_SE:</span> We took the TF targets as those genes associated with SEs with TF motif occurrence using FIMO software of the MEME suite.</p>
+                    <br>
+                    <p id="mte"><span class="rd">M_TE:</span> We took the TF targets as those genes associated with typical enhancers with TF motif occurrence using FIMO software of the MEME suite.</p>
+                    <br>
+                    <p id="matac"><span class="rd">M_ATAC:</span> We took the TF targets as those genes associated with accessible chromatin regions with TF motif occurrence using FIMO software of the MEME suite.</p>
+                    <br>
+                    <p id="msil"><span class="rd">M_Silencer:</span> We took the TF targets as those genes associated with silencer regions with TF motif occurrence using FIMO software of the MEME suite.</p>
+                    <br>
+                    <p id="mprom"><span class="rd">M_Promoter:</span> We took the TF targets as those genes associated with promoter regions with TF motif occurrence using FIMO software of the MEME suite.</p>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+</body>
+</html>

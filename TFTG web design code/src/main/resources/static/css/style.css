@@ -1,0 +1,345 @@
+th{
+    word-break:keep-all !important;
+    white-space:nowrap !important;
+}
+/* Custom Styles 附加导航 */
+ul.nav-tabs {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+}
+
+ul.nav-tabs li {
+    margin: 0;
+    border-top: 1px solid #ddd;
+}
+
+ul.nav-tabs li:first-child {
+    border-top: none;
+}
+
+ul.nav-tabs li a {
+    margin: 0;
+    padding: 8px 16px;
+    border-radius: 0;
+}
+
+ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover {
+    color: #fff;
+    background: #317190 !important;
+    border: 1px solid #317190 !important;
+}
+
+ul.nav-tabs li:first-child a {
+    border-radius: 4px 4px 0 0;
+}
+
+ul.nav-tabs li:last-child a {
+    border-radius: 0 0 4px 4px;
+}
+
+ul.nav-tabs.affix {
+    top: 30px; /* Set the top position of pinned element */
+}
+
+.pagination {
+    /*margin-top: -21px !important;*/
+}
+
+.infotabhead {
+    position: relative;
+    height: 100%;
+    padding: 30px 0 0 0;
+    border-radius: 7px;
+    box-shadow: 0 1px 9px 0 rgb(51 64 85 / 7%);
+    background-color: #ffffff;
+}
+
+.badge1 {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #00bcd4;
+    border-radius: 10px;
+}
+
+pre {
+    margin: 0px !important;
+    padding: 0px !important;
+    border: none !important;
+    background-color: unset !important;
+}
+
+i {
+    color: #ffffff;
+}
+
+.buttons-copy {
+    background: #5cb85c !important;
+    border-color: #255625 !important;
+}
+
+.buttons-excel {
+    background: #269abc !important;
+    border-color: #46b8da !important;
+}
+
+.buttons-csv {
+    background: #d58512 !important;
+    border-color: #eea236 !important;
+}
+
+.buttons-pdf {
+    background: #ac2925 !important;
+    border-color: #d43f3a !important;
+}
+
+.buttons-html5 span {
+    color: #ffffff !important;
+}
+
+#networkwidth {
+    width: 15px;
+}
+
+.breadcrumb1 {
+    float: right;
+    background-color: #fff;
+    padding: 0px;
+    margin-top: 20px;
+}
+
+.iforRight {
+    margin-right: 5px;
+}
+
+#nav2 {
+    font-size: 35px;
+}
+
+.colorLi > li + li:before {
+    color: #CCCCCC;
+    content: "| ";
+    padding: 0 5px;
+}
+
+.footer {
+    background-color: #363d46;
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+.colorLi a {
+    color: #fff;
+}
+
+.colorLi {
+    padding: 0px;
+    margin-bottom: 10px;
+    background-color: #003266;
+}
+
+/* searchresult */
+#borderTop {
+    border-top: solid 2px #00c0ef;
+    border-radius: 4px;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.borderTop {
+    border-top: solid 2px #00c0ef;
+    border-radius: 4px;
+    background-color: #fff;
+    padding: 10px;
+}
+
+/* searchresult_end */
+/* detail */
+#weig {
+    font-weight: bold;
+}
+
+/* detail_end */
+
+body {
+    padding: 0;
+    margin: 0;
+    background: #FFF;
+    font-family: arial, sans-serif important !important;
+}
+
+body a {
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+    text-decoration: none;
+}
+
+body a:hover {
+    text-decoration: none;
+}
+
+body a:focus, a:hover {
+    text-decoration: none;
+}
+
+input[type="button"], input[type="submit"] {
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+    font-family: arial, sans-serif important !important;
+}
+
+p {
+    margin: 0;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+label {
+    margin: 0;
+}
+
+img {
+    width: 100%;
+}
+
+a:focus, a:hover {
+    text-decoration: none;
+    outline: none
+}
+
+/*-- //Reset-Code --*/
+
+
+/*-- Index-Page-Styling --*/
+
+/*-- Navbar --*/
+.navbar {
+    margin-bottom: 0;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.47);
+    border: none;
+    border-bottom: 1px solid #BBB;
+    border-radius: 0;
+    width: 100%;
+    padding: 10px 0;
+}
+
+a.navbar-brand {
+    font-family: 'Racing Sans One', cursive;
+    font-size: 50px;
+}
+
+.navbar-default .navbar-brand {
+    color: #0c250b;
+}
+
+.navbar-default .navbar-brand:hover {
+    color: #FFF;
+}
+
+.navbar-nav > li {
+    padding: 5px 15px;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #21231f;
+    font-size: large;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #ff4400;
+}
+
+/*-- Link-Hover-Effect --*/
+.hover-effect a {
+    padding: 10px;
+    color: #fff;
+    font-weight: 700;
+    text-shadow: none;
+    -webkit-transition: color 0.3s;
+    -moz-transition: color 0.3s;
+    transition: color 0.3s;
+    font-family: 'Raleway', sans-serif;
+}
+
+.hover-effect a::before, .hover-effect a::after {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #ff4400;
+    content: '';
+    opacity: 0;
+    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+    -moz-transition: opacity 0.3s, -moz-transform 0.3s;
+    transition: opacity 0.3s, transform 0.3s;
+    -webkit-transform: translateY(-10px);
+    -moz-transform: translateY(-10px);
+    transform: translateY(-10px);
+}
+
+.hover-effect a::before {
+    top: 0;
+    -webkit-transform: translateY(-10px);
+    -moz-transform: translateY(-10px);
+    transform: translateY(-10px);
+}
+
+.hover-effect a::after {
+    bottom: 0;
+    -webkit-transform: translateY(10px);
+    -moz-transform: translateY(10px);
+    transform: translateY(10px);
+}
+
+.hover-effect a:hover, .hover-effect a:focus {
+    color: #ff4400;
+}
+
+.hover-effect a:hover::before, .hover-effect a:focus::before, .hover-effect a:hover::after, .hover-effect a:focus::after {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    -moz-transform: translateY(0px);
+    transform: translateY(0px);
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
+    color: #555;
+    background-color: #ffffff;
+}
+
+.analysis-hover li a:hover {
+    background-color: #003266 !important;
+    color: #fff !important;
+}
+
+/*-- //Link-Hover-Effect --*/
+/*-- //Navbar --*/
+
+.row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}

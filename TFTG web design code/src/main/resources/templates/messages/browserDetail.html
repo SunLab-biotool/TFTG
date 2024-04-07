@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+
+    <style>
+        .infotab {
+            font-size: 15px;
+            font-weight: bold;
+            height: 48px;
+        }
+
+        .panel-heading {
+            height: 50px;
+            background-color: #317190 !important;
+        }
+
+        h3 {
+            font-size: 30px !important;
+            font-weight: bold !important;
+            color: #fff !important;
+        }
+
+        /* Custom Styles */
+        ul.nav-tabs {
+            /*width: 140px;*/
+            margin-top: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+        }
+
+        ul.nav-tabs li {
+            margin: 0;
+            border-top: 1px solid #ddd;
+        }
+
+        ul.nav-tabs li:first-child {
+            border-top: none;
+        }
+
+        ul.nav-tabs li a {
+            margin: 0;
+            padding: 8px 16px;
+            border-radius: 0;
+        }
+
+        ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover {
+            color: #fff;
+            background: #317190 !important;
+            border: 1px solid #317190 !important;
+        }
+
+        ul.nav-tabs li:first-child a {
+            border-radius: 4px 4px 0 0;
+        }
+
+        ul.nav-tabs li:last-child a {
+            border-radius: 0 0 4px 4px;
+        }
+
+        ul.nav-tabs.affix {
+            top: 30px; /* Set the top position of pinned element */
+        }
+
+        .genebg {
+            background-color: #5bc0de;
+        }
+    </style>
+</head>
+<body data-spy="scroll" data-target="#myScrollspy">
+<div th:replace="inc/nav :: nav"></div>
+<div class="container-fulid">
+    <div class="row">
+        <div class="col-xs-2" id="myScrollspy">
+            <ul class="nav nav-tabs nav-stacked" data-spy="affix" data-offset-top="125">
+                <li class="active"><a href="#section-1">TF overview</a></li>
+                <li><a href="#section-2">Downstream target genes of <span id="tf6"></span></a></li>
+                <li><a href="#section-3">Detailed information of <span id="tf7"></span> targets</a></li>
+                <li><a href="#section-4">Expression of <span id="tf8"></span></a></li>
+                <li><a href="#section-5">Disease information of <span id="tf9"></span></a></li>
+                <li><a href="#section-6">Annotation of <span id="tf10"></span></a></li>
+            </ul>
+        </div>
+        <div class="col-xs-10">
+            <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" id="section-1">
+                                <span class="glyphicon glyphicon-question-sign"></span> TF overview
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-6" style="padding-right: 30px;">
+                                <table class="table table-hover table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td class="infotab">Symbol:</td>
+                                        <td id="num1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Gene ID:</td>
+                                        <td id="num2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Ensembl:</td>
+                                        <td id="num3"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Name:</td>
+                                        <td id="num4"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Family:</td>
+                                        <td id="num5"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Sample Num:</td>
+                                        <td id="num6"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Disease:</td>
+                                        <td id="num7"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Go term:</td>
+                                        <td id="num8"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Pathway:</td>
+                                        <td id="num9"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Hallmark:</td>
+                                        <td id="num10"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="infotab">Protein:</td>
+                                        <td id="num11" style="display: none"></td>
+                                        <td id="num12"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6 infotabhead" style="margin-left: -15px;margin-right: -15px;">
+                                <div id="litu" style="width: 100%;height: 450px;text-align: center;">
+
+                                </div>
+                                <!--<label class="col-sm-2 control-label">Select</label>-->
+                                <form action="graph.do" role="form" method="get" id="app">
+                                    <div class="form-group col-md-3">
+                                        <label>Method :</label>
+                                        <select v-on:change="change1" name="method" id="method"
+                                                class="form-control methodclass">
+                                            <option value="SE">C_SE</option>
+                                            <option value="TE">C_TE</option>
+                                            <option value="ATAC">C_ATAC</option>
+                                            <option value="Silencer">C_Silencer</option>
+                                            <option value="Promoter">C_Promoter</option>
+                                            <option value="BETA">C_BETA</option>
+                                            <option value="Genemapper">C_Genemapper</option>
+                                            <option value="Knock">Perturbation</option>
+                                            <option value="Curate">Curate</option>
+                                            <option value="M_SE">M_SE</option>
+                                            <option value="M_TE">M_TE</option>
+                                            <option value="M_ATAC">M_ATAC</option>
+                                            <option value="M_Silencer">M_Silencer</option>
+                                            <option value="M_Promoter">M_Promoter</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Cell line :</label>
+                                        <select v-model="cellLine" name="cellLine" id="cell" v-on:change="change2"
+                                                class="form-control">
+                                            <option v-for="s in cellLines" v-bind:value="s">{{s}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Sample ID :</label>
+                                        <select v-model="sampleID" name="sampleID" id="sample" v-on:change="change3"
+                                                class="form-control">
+                                            <option v-for="s in sampleIDs" v-bind:value="s">{{s}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Freq <span class="glyphicon glyphicon-question-sign" title="The number of TF ChIP-seq peak located in the regulatory regions."></span>:</label>
+                                        <select v-model="freq" name="freq" id="freq" v-on:change="change4"
+                                                class="form-control">
+                                            <option v-for="s in freqs" v-bind:value="s">{{s}}</option>
+                                        </select>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" id="section-2">
+                                <span class="glyphicon glyphicon-list"></span> Downstream target genes of <span
+                                    id="tf"></span>
+                                <a href="" id="downsymboltarget" download="tftargetinfo.txt" style="margin-left: 15px"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span></a>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <table id="tfMeWe" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Gene</th>
+                                    <th>C_SE<span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on ChIP-seq bind to the super-enhancers, a distal regulatory element of the gene."></span></th>
+                                    <th>C_TE<span class="glyphicon glyphicon-question-sign" title="The binding sites based on TF ChIP-seq bind to the enhancers, a distal regulatory element of the gene."></span></th>
+                                    <th>C_ATAC<span class="glyphicon glyphicon-question-sign" title="The binding sites based on TF ChIP-seq bind to the accessible chromatin regions associated with genes."></span></th>
+                                    <th>C_Silencer<span class="glyphicon glyphicon-question-sign" title="The binding sites based on TF ChIP-seq bind to the silencers regions."></span></th>
+                                    <th>C_Promoter<span class="glyphicon glyphicon-question-sign" title="The binding sites based on TF ChIP-seq bind to the promoters of genes."></span></th>
+                                    <th>C_BETA<span class="glyphicon glyphicon-question-sign" title="Using BETA method on TF ChIP-seq data to identify target genes."></span></th>
+                                    <th>C_Genemapper<span class="glyphicon glyphicon-question-sign" title="Using ROSE geneMapper.py script on TF ChIP-seq data to identify target genes."></span></th>
+                                    <th>Perturbation<span class="glyphicon glyphicon-question-sign" title="Observing the expression changes of genes before and after the perturbation of TFs to identify target genes."></span></th>
+                                    <th>Curate<span class="glyphicon glyphicon-question-sign" title="Literature-supported TF target genes were collected from several databases."></span></th>
+                                    <th>M_SE<span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in the super-enhancers, a distal regulatory element of the gene."></span></th>
+                                    <th>M_TE<span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in the enhancers, a distal regulatory element of the gene."></span></th>
+                                    <th>M_ATAC<span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in the accessible chromatin regions associated genes."></span></th>
+                                    <th>M_Silencer<span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in silencers a distal regulatory element of the gene. "></span></th>
+                                    <th>M_Promoter<span class="glyphicon glyphicon-question-sign" title="The TF binding sites based on Motif occur in the promoter regions of genes."></span></th>
+                                    <th>Weight<span class="glyphicon glyphicon-question-sign" title="The number of method for the identification of TF-target genes."></span></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" id="section-3">
+                                <span class="glyphicon glyphicon-indent-left"></span> Detailed information of <span
+                                    id="tf2"></span> targets
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12" style="text-align: center;margin-bottom: 15px;">
+                                <button type="button" class="btn btn-info active" onclick="browsermethod('SE',this)">C_SE</button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('TE',this)">C_TE</button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('ATAC',this)">C_ATAC
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('Silencer',this)">
+                                    C_Silencer
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('Promoter',this)">
+                                    C_Promoter
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('BETA',this)">C_BETA
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('Genemapper',this)">
+                                    C_Genemapper
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('Curate',this)">Curate
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('Knock',this)">Perturbation
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('M_SE',this)">M_SE</button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('M_TE',this)">M_TE</button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('M_ATAC',this)">M_ATAC
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('M_Silencer',this)">
+                                    M_Silencer
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="browsermethod('M_Promoter',this)">
+                                    M_Promoter
+                                </button>
+                            </div>
+                            <div id="browsepage">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" id="section-4">
+                                <span class="glyphicon glyphicon-picture"></span> Expression of <span id="tf3"></span>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="nav nav-tabs" style="width: 100%">
+                                <li class="active"><a href="#exp0" data-toggle="tab">Human Cancers(TCGA)</a></li>
+                                <li><a href="#exp1" data-toggle="tab">Cell Line(CCLE)</a></li>
+                                <li><a href="#exp2" data-toggle="tab">Normal Tissues(GTEx)</a></li>
+                                <li><a href="#exp3" data-toggle="tab">Cell Line(ENCODE)</a></li>
+                                <li><a href="#exp4" data-toggle="tab">Primary cell(ENCODE)</a></li>
+                                <li><a href="#exp5" data-toggle="tab">Tissue(NCBI)</a></li>
+                                <li><a href="#exp6" data-toggle="tab">In Vtro differentated cell(ENCODE)</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="exp0">
+                                    <div id="pic0" style="width: 1400px;height:400px;"></div>
+                                </div>
+                                <div class="tab-pane fade" id="exp1">
+                                    <div id="pic1" style="width: 1400px;height:400px;"></div>
+                                </div>
+                                <div class="tab-pane fade" id="exp2">
+                                    <div id="pic2" style="width: 1400px;height:400px;"></div>
+                                </div>
+                                <div class="tab-pane fade" id="exp3">
+                                    <div id="pic3" style="width: 1400px;height:400px;"></div>
+                                </div>
+                                <div class="tab-pane fade" id="exp4">
+                                    <div id="pic4" style="width: 1400px;height:400px;"></div>
+                                </div>
+                                <div class="tab-pane fade" id="exp5">
+                                    <div id="pic5" style="width: 1400px;height:400px;"></div>
+                                </div>
+                                <div class="tab-pane fade" id="exp6">
+                                    <div id="pic6" style="width: 1400px;height:400px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" id="section-5">
+                                <span class="glyphicon glyphicon-th-list"></span> Disease information of <span
+                                    id="tf4"></span>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <table id="diseaseTab" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>TF</th>
+                                    <th>Disease name</th>
+                                    <th>Disease Type</th>
+                                    <th>Disease Class</th>
+                                    <th>Disease Semantic type</th>
+                                    <th>Source</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 15px;margin-bottom: 15px;">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" id="section-6">
+                                <span class="glyphicon glyphicon-indent-left"></span> Annotation of <span
+                                    id="tf5"></span>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul id="myTab" class="nav nav-tabs" style="width: 100%">
+                                <li class="active"><a href="#pathway" data-toggle="tab">Pathway</a></li>
+                                <li><a href="#goterm" data-toggle="tab">GoTerm</a></li>
+                                <li><a href="#hallmark" data-toggle="tab">Hallmark</a></li>
+                            </ul>
+                            <br>
+                            <div id="myTabContent" class="tab-content">
+                                <div class="tab-pane fade in active" id="pathway">
+                                    <table id="pathwayTab" class="table table-striped table-bordered"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>TF</th>
+                                            <th>Pathway name</th>
+                                            <th>Pathway source</th>
+                                            <th>Gene number</th>
+                                            <th>Edge number</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="goterm">
+                                    <table id="gotermTab" class="table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Gene</th>
+                                            <th>GO term</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="hallmark">
+                                    <table id="hallmarkTab" class="table table-striped table-bordered"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Gene</th>
+                                            <th>Cancer hallmark</th>
+                                            <th>GO Term ID</th>
+                                            <th>GO Term Name</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+</body>
+
+<script th:src="@{/js/browser.js}"></script>
+<script th:src="@{/js/expersionEchart.js}"></script>
+<script th:inline="javascript">
+    var symbol = [[${symbol}]];
+    var method = [[${method}]];
+    // $(".methodclass").val("M_SE");
+
+    $("#tf").text(symbol);
+    $("#tf2").text(symbol);
+    $("#tf3").text(symbol);
+    $("#tf4").text(symbol);
+    $("#tf5").text(symbol);
+    $("#tf6").text(symbol);
+    $("#tf7").text(symbol);
+    $("#tf8").text(symbol);
+    $("#tf9").text(symbol);
+    $("#tf10").text(symbol);
+
+    $("#downsymboltarget").attr("href","symboltargetinfo?tf="+symbol);
+    setmethod(method)
+    outtf(symbol)
+    infotab(symbol)
+    tfMeWe(symbol)
+
+    if (method == "SE") {
+        browserse(symbol)
+    } else if (method == "TE") {
+        browserte(symbol)
+    } else if (method == "ATAC") {
+        browseratac(symbol)
+    } else if (method == "Silencer") {
+        browsersilencer(symbol)
+    } else if (method == "Promoter") {
+        browserpromoter(symbol)
+    } else if (method == "BETA") {
+        browserbeta(symbol)
+    } else if (method == "Genemapper") {
+        browsergenemapper(symbol)
+    } else if (method == "Knock") {
+        browserknock(symbol)
+    } else if (method == "Curate") {
+        browsercurate(symbol)
+    } else if (method == "M_SE") {
+        browsermse(symbol)
+    } else if (method == "M_TE") {
+        browsermte(symbol)
+    } else if (method == "M_ATAC") {
+        browsermatac(symbol)
+    } else if (method == "M_Silencer") {
+        browsermsilencer(symbol)
+    } else if (method == "M_Promoter") {
+        browsermpromoter(symbol)
+    } else {
+        browserse(symbol)
+    }
+
+
+    pathwayTab(symbol)
+    gotermTab(symbol)
+    hallmarkTab(symbol)
+    diseaseTab(symbol)
+    datatablesShow()
+    graph(symbol)
+    pic0(symbol)
+    pic1(symbol)
+    pic2(symbol)
+    pic3(symbol)
+    pic4(symbol)
+    pic5(symbol)
+    pic6(symbol)
+</script>
+
+</html>

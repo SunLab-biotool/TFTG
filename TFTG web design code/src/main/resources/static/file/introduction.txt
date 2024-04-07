@@ -1,0 +1,5 @@
+在webapps文件夹下，存放所有R代码，shell脚本，文件夹名为TFTGdb.
+已经备份过，周新源备份，全部打包
+在多个controller下若是执行R代码，shell脚本等需要的路径，全部以变量的形式放在前几行函数前
+
+download以及静态图片资源，需要把sample图片copy到img文件夹下，download文件放在file文件下

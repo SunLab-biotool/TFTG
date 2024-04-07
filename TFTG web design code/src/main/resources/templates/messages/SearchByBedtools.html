@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/favicon.ico}" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+    <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>-->
+    <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>-->
+    <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>-->
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+</head>
+<body>
+<div th:replace="inc/nav :: nav"></div>
+
+<div class="container-fulid" style="margin-top: 10px;">
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1">
+            <h1 style="font-size: 40px;font-weight: 600;"><span class="glyphicon glyphicon-list"></span> Result of
+                genomic region</h1>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-md-10 col-md-offset-1">
+            <table id="TabByBedtools" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                <tr>
+                    <th style="word-break:keep-all;white-space:nowrap;">TF_chr</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">TF_start</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">TF_end</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">Sample ID</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">SE_chr</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">SE_start</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">SE_end</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">Overlap gene</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">Proximal gene</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">Closest gene</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">SE source</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">Cell line</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">ORL1<span class="glyphicon glyphicon-question-sign" title="The overlapping length between the peak of TF ChIP-seq and regulatory region."></span></th>
+                    <th style="word-break:keep-all;white-space:nowrap;">Input_chr</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">Input_start</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">Input_end</th>
+                    <th style="word-break:keep-all;white-space:nowrap;">ORL2<span class="glyphicon glyphicon-question-sign" title="The overlapping length between the peak of TF ChIP-seq and the input region."></span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item:${data}">
+                    <td th:text="${item.col1}"></td>
+                    <td th:text="${item.col2}"></td>
+                    <td th:text="${item.col3}"></td>
+                    <td><a target='_blank' th:href="@{sampleid(sampleid=${item.col4})}" th:text="${item.col4}"></a></td>
+                    <td th:text="${item.col5}"></td>
+                    <td th:text="${item.col6}"></td>
+                    <td th:text="${item.col7}"></td>
+                    <td th:text="${item.col8}"></td>
+                    <td th:text="${item.col9}"></td>
+                    <td th:text="${item.col10}"></td>
+                    <td th:text="${item.col11}"></td>
+                    <td th:text="${item.col12}"></td>
+                    <td th:text="${item.col13}"></td>
+                    <td th:text="${item.col14}"></td>
+                    <td th:text="${item.col15}"></td>
+                    <td th:text="${item.col16}"></td>
+                    <td th:text="${item.col17}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="inc/footer :: footer"></div>
+</body>
+<script th:src="@{/js/search.js}"></script>
+<script th:inline="javascript">
+    $('#TabByBedtools').DataTable({
+        // bStateSave: false,
+        oLanguage: {
+            sLoadingRecords: '<img src="img/loading.gif" style="width: 350px;">'
+        },
+        // serverSide: true,
+        searching: true,
+        paging: true,
+        ordering: true,
+        scrollX: true,
+        dom: 'Bfrtip',
+        destroy: true
+    });
+</script>
+</html>

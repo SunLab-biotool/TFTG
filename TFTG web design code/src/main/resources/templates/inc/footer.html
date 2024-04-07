@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TFTG</title>
+</head>
+<body>
+
+<div class="footer" th:fragment="footer">
+    <div class="container">
+        <div class="copyright">
+            <ol class="breadcrumb colorLi" style="background-color: #363d46;margin-bottom: unset;">
+                <li><a href="" th:href="${#httpServletRequest.getContextPath()+'/'}">Home</a></li>
+                <li><a href="" th:href="${#httpServletRequest.getContextPath()+'/search'}">Search</a></li>
+                <li><a href="" th:href="${#httpServletRequest.getContextPath()+'/browser'}">Browse</a></li>
+                <li><a href="" th:href="${#httpServletRequest.getContextPath()+'/download'}">Download</a></li>
+                <li><a href="http://bio.licpathway.net/">Contact</a></li>
+                <li><a href="" th:href="${#httpServletRequest.getContextPath()+'/help'}">Help</a></li>
+            </ol>
+            <img th:src="@{/img/beianimg.png}" style="width: 18px;margin-bottom: 3px;"><a
+                href="http://www.beian.miit.gov.cn" style="color: #fff;">黑ICP备16009434号-1</a>
+            <br><a href="http://www.licpathway.net/" style="color: #fff;">Copyright
+            <span class="glyphicon glyphicon-copyright-mark"></span> 2022 HMU
+        </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>	
