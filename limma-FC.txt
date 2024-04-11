@@ -1,0 +1,97 @@
+rm(list=ls())
+library(readxl)
+library(limma)
+library(data.table)
+dir()
+info=data.frame(fread("download_TF_knock_down_out_information2.txt",header=T,sep="\t"))
+info2=unique(data.frame(read_excel("allGEO_OK.xls",sheet = 1)))
+temp=c()
+for(i in 1:nrow(info))
+{
+  data=data.frame(fread(paste(info[i,1],".txt",sep=""),header=T,sep="\t",na.strings = "null"))
+  colnames(data)=paste(info[i,2],colnames(data),info[i,6],sep="_")
+  group_list=factor(info2[which(info2[,16]%in%colnames(data)[2:ncol(data)]),7])
+  lo_control=which(group_list%in%"control")
+  lo_case=which(group_list%in%"case")
+  
+  rownames(data)=data[,1]
+  exprSet=data[,-1]
+  exprSet=na.omit(exprSet)
+  dv=range(exprSet)[2]-range(exprSet)[1]
+  
+  control0<-rowSums(exprSet[lo_control] == 0)
+  case0<-rowSums(exprSet[lo_case] == 0)
+  exprSet2=exprSet[which(control0<length(lo_control)&case0<length(lo_case)),]
+  mean_control <- apply(exprSet2[lo_control], 1, mean)
+  mean_case <- apply(exprSet2[lo_case], 1, mean)
+  if(length(group_list)>2)
+  {
+    if(dv<1000)
+    {
+      ###FC
+      fold_change <- data.frame(2**(mean_case - mean_control))
+      FC=data.frame(cbind(rownames(fold_change),fold_change[,1]))
+
+      ###limma
+      if(range(exprSet)[1]<0)
+      {
+        exprSet[exprSet<0]=log(exprSet[exprSet<0]**2+1)
+      }
+      design <- model.matrix(~factor(group_list))
+      colnames(design)=levels(factor(group_list))
+      rownames(design)=colnames(exprSet)
+      v=voom(exprSet,design,normalize="quantile")
+      fit <- lmFit(v,design)
+      fit2 <- eBayes(fit)
+      tempOutput = topTable(fit2,coef=2,n=Inf)
+      DEG_voom = na.omit(tempOutput)
+      limma=data.frame(cbind(rownames(DEG_voom),DEG_voom[,1:6]))
+      
+    }else
+    {
+      ###FC
+      fold_change <- data.frame(mean_case/mean_control)
+      FC=data.frame(cbind(rownames(fold_change),fold_change[,1]))
+      exprSet3=log(abs(exprSet)+1)
+      if(range(exprSet3)[1]<0)
+      {
+        exprSet3[exprSet3<0]=log(exprSet3[exprSet3<0]**2+1)
+      }
+      ###limma
+      design <- model.matrix(~factor(group_list))
+      colnames(design)=levels(factor(group_list))
+      rownames(design)=colnames(exprSet3)
+      v=voom(exprSet3,design,normalize="quantile")
+      fit <- lmFit(v,design)
+      fit2 <- eBayes(fit)
+      tempOutput = topTable(fit2,coef=2,n=Inf)
+      DEG_voom = na.omit(tempOutput)
+      limma=data.frame(cbind(rownames(DEG_voom),DEG_voom[,1:6]))
+    }
+    FC_limma=merge(FC,limma,by.x="X1",by.y="rownames.DEG_voom.",all = TRUE)
+  }else
+  {
+    if(dv<1000)
+    {
+      ###FC
+      fold_change <- data.frame(2**(mean_case - mean_control))
+      FC=data.frame(cbind(rownames(fold_change),fold_change[,1]))
+    }else
+    {
+      ###FC
+      fold_change <- data.frame(mean_case/mean_control)
+      FC=data.frame(cbind(rownames(fold_change),fold_change[,1]))
+    }
+    FC_limma=cbind(FC,"null","null","null","null","null","null")
+    
+  }
+  FC_limma[,9:12]<-info[i,1:4]
+  FC_limma[,13]<-info[i,6]
+  FC_limma[,14]<-info[i,10]
+  FC_limma=FC_limma[,c(9,10,1,2,3,6,7,11:14)]
+  colnames(FC_limma)=c("sample_id","TF","Gene","FC","Log2FC","P_value","adj_P_value","sample_source","sample_experiment_accession","sample_method","Sample_biosample_name")
+  temp=rbind(temp,FC_limma)
+  print(info[i,1])
+}
+
+write.table(temp,"knockTF_limma_FC.txt",sep="\t",quote=F,row.names=F)
